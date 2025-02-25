@@ -1,4 +1,15 @@
-import { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
+export interface SessionInfo {
+    agent: {
+        is_desktop: boolean;
+        platform: string;
+        browser: string;
+    };
+    ip_address: string;
+    is_current_device: boolean;
+    last_active: string;
+}
 
 export interface Auth {
     user: User;

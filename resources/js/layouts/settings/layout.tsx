@@ -2,12 +2,12 @@ import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { type NavItem } from '@/types';
+import type { NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 
 const sidebarNavItems: NavItem[] = [
     {
-        title: 'Profile',
+        title: 'General',
         url: '/settings/profile',
         icon: null,
     },
@@ -19,6 +19,11 @@ const sidebarNavItems: NavItem[] = [
     {
         title: 'Appearance',
         url: '/settings/appearance',
+        icon: null,
+    },
+    {
+        title: 'Security',
+        url: '/settings/security',
         icon: null,
     },
 ];
