@@ -47,7 +47,9 @@ final class HandleInertiaRequests extends Middleware
             'quote' => ['message' => mb_trim($message), 'author' => mb_trim($author)],
             'auth' => [
                 'user' => function () use ($request) {
-                    $user = $request->user();
+                    if (! $user = $request->user()) {
+                        return;
+                    }
 
                     return array_merge($user->toArray(), [
                         'two_factor_enabled' => Features::enabled(Features::twoFactorAuthentication())
