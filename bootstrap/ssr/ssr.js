@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import * as React from "react";
-import { useId, useState, useEffect, Fragment as Fragment$1, useCallback, useRef } from "react";
+import { useState, useRef, useId, useEffect, Fragment as Fragment$1, useCallback } from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
@@ -15,7 +15,6 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
-import { Transition } from "@headlessui/react";
 import axios from "axios";
 import createServer from "@inertiajs/react/server";
 import ReactDOMServer from "react-dom/server";
@@ -487,9 +486,80 @@ const __vite_glob_0_4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   default: ResetPassword
 }, Symbol.toStringTag, { value: "Module" }));
 function TwoFactorChallenge({ status }) {
+  const [recovery, setRecovery] = useState(false);
+  const recoveryCodeInput = useRef(null);
+  const codeInput = useRef(null);
+  const { data, setData, post, processing, errors } = useForm({
+    code: "",
+    recovery_code: ""
+  });
+  const toggleRecovery = async () => {
+    var _a, _b;
+    setRecovery((prev) => !prev);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    if (recovery) {
+      (_a = codeInput.current) == null ? void 0 : _a.focus();
+      setData("recovery_code", "");
+    } else {
+      (_b = recoveryCodeInput.current) == null ? void 0 : _b.focus();
+      setData("code", "");
+    }
+  };
+  const submit = (e) => {
+    e.preventDefault();
+    post(route("two-factor.login"));
+  };
   return /* @__PURE__ */ jsxs(AuthLayout, { title: "Two Factor Authentication", description: "Complete The Step", children: [
     /* @__PURE__ */ jsx(Head, { title: "Two Factor Authentication" }),
-    status && /* @__PURE__ */ jsx("div", { className: "mb-4 text-center text-sm font-medium text-green-600", children: status })
+    /* @__PURE__ */ jsx("div", { className: "text-sm text-gray-600 dark:text-gray-400", children: recovery ? "Please confirm access to your account by entering one of your emergency recovery codes." : "Please confirm access by entering the authentication code from your authenticator app." }),
+    /* @__PURE__ */ jsxs("form", { onSubmit: submit, children: [
+      !recovery ? /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx(Label, { htmlFor: "code", children: "Enter your 2FA Code" }),
+        /* @__PURE__ */ jsx(
+          Input,
+          {
+            id: "code",
+            ref: codeInput,
+            value: data.code,
+            onChange: (e) => setData("code", e.target.value),
+            type: "text",
+            className: "mt-1 block w-full",
+            autoComplete: "one-time-code"
+          }
+        ),
+        /* @__PURE__ */ jsx(InputError, { className: "mt-2", message: errors.code })
+      ] }) : /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx(Label, { htmlFor: "recovery_code", children: "Recovery Code" }),
+        /* @__PURE__ */ jsx(
+          Input,
+          {
+            id: "recovery_code",
+            ref: recoveryCodeInput,
+            value: data.recovery_code,
+            onChange: (e) => setData("recovery_code", e.target.value),
+            type: "text",
+            className: "mt-1 block w-full",
+            autoComplete: "one-time-code"
+          }
+        ),
+        /* @__PURE__ */ jsx(InputError, { className: "mt-2", message: errors.recovery_code })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "mt-4 flex items-center justify-end", children: [
+        /* @__PURE__ */ jsx(
+          "button",
+          {
+            type: "button",
+            className: "cursor-pointer text-sm text-gray-600 underline hover:text-gray-900 dark:text-gray-400",
+            onClick: toggleRecovery,
+            children: recovery ? "Use an authentication code" : "Use a recovery code"
+          }
+        ),
+        /* @__PURE__ */ jsxs(Button, { className: "ms-4", disabled: processing, children: [
+          processing && /* @__PURE__ */ jsx(LoaderCircle, { className: "h-4 w-4 animate-spin" }),
+          "Log in"
+        ] })
+      ] })
+    ] })
   ] });
 }
 const __vite_glob_0_5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -1796,20 +1866,10 @@ function General({ mustVerifyEmail, status }) {
             ] }),
             status === "verification-link-sent" && /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm font-medium text-green-600", children: "A new verification link has been sent to your email address." })
           ] }),
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
-            /* @__PURE__ */ jsx(Button, { disabled: processing, children: "Save" }),
-            /* @__PURE__ */ jsx(
-              Transition,
-              {
-                show: recentlySuccessful,
-                enter: "transition ease-in-out",
-                enterFrom: "opacity-0",
-                leave: "transition ease-in-out",
-                leaveTo: "opacity-0",
-                children: /* @__PURE__ */ jsx("p", { className: "text-sm text-neutral-600", children: "Saved" })
-              }
-            )
-          ] })
+          /* @__PURE__ */ jsx("div", { className: "flex items-center gap-4", children: /* @__PURE__ */ jsxs(Button, { disabled: processing, children: [
+            processing && /* @__PURE__ */ jsx(LoaderCircle, { className: "h-4 w-4 animate-spin" }),
+            "Save"
+          ] }) })
         ] })
       ] }),
       /* @__PURE__ */ jsx(DeleteUser, {})
@@ -1911,20 +1971,10 @@ function Password() {
           ),
           /* @__PURE__ */ jsx(InputError, { message: errors.password_confirmation })
         ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
-          /* @__PURE__ */ jsx(Button, { disabled: processing, children: "Save password" }),
-          /* @__PURE__ */ jsx(
-            Transition,
-            {
-              show: recentlySuccessful,
-              enter: "transition ease-in-out",
-              enterFrom: "opacity-0",
-              leave: "transition ease-in-out",
-              leaveTo: "opacity-0",
-              children: /* @__PURE__ */ jsx("p", { className: "text-sm text-neutral-600", children: "Saved" })
-            }
-          )
-        ] })
+        /* @__PURE__ */ jsx("div", { className: "flex items-center gap-4", children: /* @__PURE__ */ jsxs(Button, { disabled: processing, children: [
+          processing && /* @__PURE__ */ jsx(LoaderCircle, { className: "h-4 w-4 animate-spin" }),
+          "Save password"
+        ] }) })
       ] })
     ] }) })
   ] });

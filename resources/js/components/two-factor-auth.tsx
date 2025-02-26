@@ -1,3 +1,4 @@
+import type { SharedData } from '@/types';
 import { useForm, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import { type FormEventHandler, Fragment, useState } from 'react';
@@ -9,7 +10,7 @@ import { Label } from './ui/label';
 import { Separator } from './ui/separator';
 
 export default function TwoFactorAuthentication({ requiresConfirmation }: { requiresConfirmation: boolean }) {
-    const { auth } = usePage().props;
+    const { auth } = usePage<SharedData>().props;
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(auth.user.two_factor_enabled ?? false);
     const [qrCode, setQrCode] = useState(null);
     const [setupKey, setSetupKey] = useState(null);
