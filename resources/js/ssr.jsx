@@ -1,9 +1,9 @@
 /* prettier-ignore */
-import {
-createInertiaApp
-} from '@inertiajs/react';
+import { Ziggy } from '@/ziggy';
+import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
 import ReactDOMServer from 'react-dom/server';
+import { route } from 'ziggy-js';
 
 createServer((page) =>
     createInertiaApp({
@@ -16,6 +16,9 @@ createServer((page) =>
             return pages[`./pages/${name}.tsx`];
         },
         // prettier-ignore
-        setup: ({ App, props }) => <App {...props} />,
+        setup: ({ App, props }) => {
+            global.route = (name, params, absolute, config = Ziggy) => route(name, params, absolute, config);
+            return <App {...props} />
+        },
     }),
 );

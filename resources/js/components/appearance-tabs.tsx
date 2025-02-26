@@ -1,11 +1,12 @@
-import { type Appearance, useAppearance } from '@/hooks/use-appearance';
+import { getAppearance, setAppearance, type Appearance } from '@/hooks/use-appearance';
 import { cn } from '@/lib/utils';
 import { type LucideIcon, Monitor, Moon, Sun } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
 import { Label } from './ui/label';
 
-export default function AppearanceToggleTab({ className = '', ...props }: HTMLAttributes<HTMLDivElement>) {
-    const { appearance, updateAppearance } = useAppearance();
+
+export default function AppearanceToggleTab({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
+    const appearance = getAppearance(); // Get the stored theme preference
 
     const tabs: { value: Appearance; icon: LucideIcon; label: string }[] = [
         { value: 'light', icon: Sun, label: 'Light' },
@@ -24,7 +25,7 @@ export default function AppearanceToggleTab({ className = '', ...props }: HTMLAt
                     <button
                         type="button"
                         key={value}
-                        onClick={() => updateAppearance(value)}
+                        onClick={() => setAppearance(value)}
                         className={cn(
                             'flex items-center rounded-md px-3.5 py-1.5 transition-colors',
                             appearance === value

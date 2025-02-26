@@ -29,7 +29,7 @@ const sidebarNavItems: NavItem[] = [
 ];
 
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
-    const currentPath = window.location.pathname;
+    const currentPath = route().current();
 
     return (
         <div className="px-4 py-6">

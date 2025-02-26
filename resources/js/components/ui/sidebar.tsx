@@ -83,8 +83,8 @@ const SidebarProvider = React.forwardRef<
             }
         };
 
-        window.addEventListener('mobile-navigation', handleMobileNavigation);
-        return () => window.removeEventListener('mobile-navigation', handleMobileNavigation);
+        addEventListener('mobile-navigation', handleMobileNavigation);
+        return () => removeEventListener('mobile-navigation', handleMobileNavigation);
     }, [isMobile, setOpenMobile]);
 
     // Adds a keyboard shortcut to toggle the sidebar.
@@ -96,8 +96,8 @@ const SidebarProvider = React.forwardRef<
             }
         };
 
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        addEventListener('keydown', handleKeyDown);
+        return () => removeEventListener('keydown', handleKeyDown);
     }, [toggleSidebar]);
 
     // We add a state so that we can do data-state="expanded" or "collapsed".

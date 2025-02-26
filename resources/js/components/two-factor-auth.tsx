@@ -10,7 +10,6 @@ import { Separator } from './ui/separator';
 
 export default function TwoFactorAuthentication({ requiresConfirmation }: { requiresConfirmation: boolean }) {
     const { auth } = usePage().props;
-    console.log(auth);
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(auth.user.two_factor_enabled ?? false);
     const [qrCode, setQrCode] = useState(null);
     const [setupKey, setSetupKey] = useState(null);
@@ -81,8 +80,6 @@ export default function TwoFactorAuthentication({ requiresConfirmation }: { requ
             },
         });
     };
-
-    console.log(errors);
 
     return (
         <div className="space-y-6">
