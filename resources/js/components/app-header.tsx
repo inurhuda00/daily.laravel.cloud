@@ -11,9 +11,9 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import type { BreadcrumbItem, NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Files, Folder, LayoutGrid, Menu, Rows2, Search, Zap } from 'lucide-react';
-import AppLogo from './app-logo';
+import { AudioWaveform, BookOpen, Command, Files, Folder, GalleryVerticalEnd, LayoutGrid, Menu, Rows2, Search, Zap } from 'lucide-react';
 import AppLogoIcon from './app-logo-icon';
+import { TeamSwitcher } from './team-switcher';
 
 const mainNavItems: NavItem[] = [
     {
@@ -56,6 +56,26 @@ const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral
 interface AppHeaderProps {
     breadcrumbs?: BreadcrumbItem[];
 }
+
+const data = {
+    teams: [
+        {
+            name: 'Acme Inc',
+            logo: GalleryVerticalEnd,
+            plan: 'Enterprise',
+        },
+        {
+            name: 'Acme Corp.',
+            logo: AudioWaveform,
+            plan: 'Startup',
+        },
+        {
+            name: 'Evil Corp.',
+            logo: Command,
+            plan: 'Free',
+        },
+    ],
+};
 
 export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
@@ -109,9 +129,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                         </Sheet>
                     </div>
 
-                    <Link href="/dashboard" prefetch className="flex items-center space-x-2">
-                        <AppLogo />
-                    </Link>
+                    <TeamSwitcher teams={data.teams} />
 
                     {/* Desktop Navigation */}
                     <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
