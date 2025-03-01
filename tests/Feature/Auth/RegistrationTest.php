@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
+
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('registration screen can be rendered', function () {
@@ -18,6 +20,8 @@ test('new users can register', function () {
         'password_confirmation' => 'password',
     ]);
 
+    $user = User::where('email', 'test@example.com')->firstOrFail();
+
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect(route('dashboard', ['team' => $user->currentTeam->slug], absolute: false));
 });

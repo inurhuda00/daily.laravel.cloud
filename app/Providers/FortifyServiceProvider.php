@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Contracts\VerifyEmailResponse;
 use Laravel\Fortify\Fortify;
 
 final class FortifyServiceProvider extends ServiceProvider
@@ -48,6 +49,14 @@ final class FortifyServiceProvider extends ServiceProvider
             public function toResponse($request)
             {
                 return Redirect::route('dashboard', $request->user()->currentTeam);
+            }
+        });
+
+        $this->app->instance(VerifyEmailResponse::class, new class implements VerifyEmailResponse
+        {
+            public function toResponse($request)
+            {
+                return Redirect::intended("/{$request->user()->currentTeam->slug}/dashboard?verified=1", 303);
             }
         });
 
