@@ -16,6 +16,8 @@ use Laravel\Sanctum\HasApiTokens;
 final class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
+
+    /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory;
     use HasProfilePhoto;
     use HasTeams;
@@ -51,7 +53,7 @@ final class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $appends = [
-        'profile_photo_url',
+        'avatar',
     ];
 
     /**

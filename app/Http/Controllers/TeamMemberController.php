@@ -11,6 +11,7 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 final class TeamMemberController extends Controller
 {
@@ -72,7 +73,7 @@ final class TeamMemberController extends Controller
         );
 
         if ($request->user()->id === $user->id) {
-            return redirect(config('fortify.home'));
+            return Redirect::to("/{$request->user()->currentTeam->slug}/dashboard", 303);
         }
 
         return back(303);

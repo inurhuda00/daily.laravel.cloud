@@ -6,6 +6,7 @@ namespace App;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redirect;
 
 trait RedirectsActions
 {
@@ -21,10 +22,10 @@ trait RedirectsActions
             $response = $action->redirectTo();
         } else {
             $response = property_exists($action, 'redirectTo')
-                                ? $action->redirectTo
-                                : config('fortify.home');
+                ? $action->redirectTo
+                : Redirect::to("/{$action->currentTeam->slug}/dashboard", 303);
         }
 
-        return $response instanceof Response ? $response : redirect($response);
+        return $response instanceof Response ? $response : Redirect::to($response, 303);
     }
 }

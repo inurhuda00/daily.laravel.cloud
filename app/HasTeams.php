@@ -209,17 +209,19 @@ trait HasTeams
             return false;
         }
 
-        if (in_array(HasApiTokens::class, class_uses_recursive($this)) &&
+        if (
+            in_array(HasApiTokens::class, class_uses_recursive($this)) &&
             ! $this->tokenCan($permission) &&
-            $this->currentAccessToken() !== null) {
+            $this->currentAccessToken() !== null
+        ) {
             return false;
         }
 
         $permissions = $this->teamPermissions($team);
 
         return in_array($permission, $permissions) ||
-               in_array('*', $permissions) ||
-               (Str::endsWith($permission, ':create') && in_array('*:create', $permissions)) ||
-               (Str::endsWith($permission, ':update') && in_array('*:update', $permissions));
+            in_array('*', $permissions) ||
+            (Str::endsWith($permission, ':create') && in_array('*:create', $permissions)) ||
+            (Str::endsWith($permission, ':update') && in_array('*:update', $permissions));
     }
 }

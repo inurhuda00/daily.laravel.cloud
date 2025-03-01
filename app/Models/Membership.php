@@ -6,7 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-abstract class Membership extends Pivot
+final class Membership extends Pivot
 {
     /**
      * Indicates if the IDs are auto-incrementing.

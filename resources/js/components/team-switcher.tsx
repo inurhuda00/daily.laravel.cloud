@@ -1,29 +1,26 @@
 import { ChevronsUpDown, Plus } from 'lucide-react';
-import * as React from 'react';
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import type { Team } from '@/types';
+import { Link, useForm } from '@inertiajs/react';
 import { Button } from './ui/button';
 
-export function TeamSwitcher({
-    teams,
-}: {
-    teams: {
-        name: string;
-        logo: React.ElementType;
-        plan: string;
-    }[];
-}) {
-    const [activeTeam, setActiveTeam] = React.useState(teams[0]);
+export function TeamSwitcher({ currentTeam, teams }: { currentTeam: Team; teams: Team[] }) {
+    const { put } = useForm({ team_id: currentTeam.id });
+
+    const switchToTeam = (e: React.MouseEvent<HTMLDivElement>, team: Team) => {
+        e.preventDefault();
+        put(route('current-team.update', { id: team.id }), { preserveState: false });
+    };
 
     return (
         <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm">
-                <a href={activeTeam.name} className="flex items-center gap-2">
-                    <activeTeam.logo className="size-6" />
+                <Link href={route('dashboard', currentTeam.slug)} className="flex items-center gap-2">
                     <div className="text-left text-sm leading-tight">
-                        <span className="truncate">{activeTeam.name}</span>
+                        <span className="truncate">{currentTeam.name}</span>
                     </div>
-                </a>
+                </Link>
             </Button>
 
             <DropdownMenu>
@@ -39,10 +36,7 @@ export function TeamSwitcher({
                     sideOffset={4}
                 >
                     {teams.map((team) => (
-                        <DropdownMenuItem key={team.name} onClick={() => setActiveTeam(team)} className="gap-2 p-2">
-                            <div className="flex size-6 items-center justify-center rounded-sm border">
-                                <team.logo className="size-4 shrink-0" />
-                            </div>
+                        <DropdownMenuItem key={team.slug} onClick={(e) => switchToTeam(e, team)} className="gap-2 p-2">
                             <div className="text-left text-sm leading-tight">
                                 <span className="truncate">{team.name}</span>
                             </div>
@@ -53,7 +47,7 @@ export function TeamSwitcher({
                         <div className="bg-background flex size-6 items-center justify-center rounded-md border">
                             <Plus className="size-4" />
                         </div>
-                        <div className="text-muted-foreground font-medium">Add team</div>
+                        <div className="text-muted-foreground text-xs font-medium">Add team</div>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

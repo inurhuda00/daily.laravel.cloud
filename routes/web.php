@@ -11,7 +11,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified', AuthenticateSession::class])->group(function () {
-    Route::get('dashboard', function () {
+    Route::get('{team:slug}/dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });

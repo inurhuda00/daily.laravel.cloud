@@ -21,7 +21,8 @@ trait HasProfilePhoto
         tap($this->profile_photo_path, function ($previous) use ($photo, $storagePath) {
             $this->forceFill([
                 'profile_photo_path' => $photo->storePublicly(
-                    $storagePath, ['disk' => $this->profilePhotoDisk()]
+                    $storagePath,
+                    ['disk' => $this->profilePhotoDisk()]
                 ),
             ])->save();
 
@@ -52,12 +53,12 @@ trait HasProfilePhoto
     /**
      * Get the URL to the user's profile photo.
      */
-    protected function profilePhotoUrl(): Attribute
+    protected function avatar(): Attribute
     {
         return Attribute::get(function (): string {
             return $this->profile_photo_path
-                    ? Storage::disk($this->profilePhotoDisk())->get($this->profile_photo_path)
-                    : $this->defaultProfilePhotoUrl();
+                ? Storage::disk($this->profilePhotoDisk())->get($this->profile_photo_path)
+                : $this->defaultProfilePhotoUrl();
         });
     }
 

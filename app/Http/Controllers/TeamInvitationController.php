@@ -10,6 +10,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Redirect;
 
 final class TeamInvitationController extends Controller
 {
@@ -34,7 +35,7 @@ final class TeamInvitationController extends Controller
 
         $invitation->delete();
 
-        return redirect(config('fortify.home'))->banner(
+        return Redirect::to("/{$request->user()->currentTeam->slug}/dashboard", 303)->banner(
             __('Great! You have accepted the invitation to join the :team team.', ['team' => $invitation->team->name]),
         );
     }

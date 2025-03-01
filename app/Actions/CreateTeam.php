@@ -9,6 +9,7 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 final class CreateTeam
 {
@@ -29,6 +30,7 @@ final class CreateTeam
 
         $user->switchTeam($team = $user->ownedTeams()->create([
             'name' => $input['name'],
+            'slug' => Str::slug($input['name']),
             'personal_team' => false,
         ]));
 

@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 final class CurrentTeamController extends Controller
 {
@@ -23,6 +24,6 @@ final class CurrentTeamController extends Controller
             abort(403);
         }
 
-        return redirect(config('fortify.home'), 303);
+        return Redirect::to("/{$request->user()->currentTeam->slug}/dashboard", 303);
     }
 }

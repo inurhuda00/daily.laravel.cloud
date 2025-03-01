@@ -9,32 +9,22 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
-import type { BreadcrumbItem, NavItem, SharedData } from '@/types';
+import type { BreadcrumbItem, NavItem, SharedData, Team } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { AudioWaveform, BookOpen, Command, Files, Folder, GalleryVerticalEnd, LayoutGrid, Menu, Rows2, Search, Zap } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Menu, Search, Settings } from 'lucide-react';
 import AppLogoIcon from './app-logo-icon';
 import { TeamSwitcher } from './team-switcher';
 
-const mainNavItems: NavItem[] = [
+const mainNavItems: (currentTeam: Team) => NavItem[] = (currentTeam: Team) => [
     {
-        title: 'Dashboard',
-        url: '/dashboard',
+        title: 'Overview',
+        url: route('dashboard', currentTeam.slug),
         icon: LayoutGrid,
     },
     {
-        title: 'Files',
-        url: '/files',
-        icon: Files,
-    },
-    {
-        title: 'Queue',
-        url: '/queue',
-        icon: Rows2,
-    },
-    {
-        title: 'Cache',
-        url: '/cache',
-        icon: Zap,
+        title: 'Settings',
+        url: route('dashboard', currentTeam.slug),
+        icon: Settings,
     },
 ];
 
@@ -57,30 +47,11 @@ interface AppHeaderProps {
     breadcrumbs?: BreadcrumbItem[];
 }
 
-const data = {
-    teams: [
-        {
-            name: 'Acme Inc',
-            logo: GalleryVerticalEnd,
-            plan: 'Enterprise',
-        },
-        {
-            name: 'Acme Corp.',
-            logo: AudioWaveform,
-            plan: 'Startup',
-        },
-        {
-            name: 'Evil Corp.',
-            logo: Command,
-            plan: 'Free',
-        },
-    ],
-};
-
 export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
+
     return (
         <>
             <div className="border-sidebar-border/80 border-b">
@@ -101,7 +72,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 <div className="mt-6 flex h-full flex-1 flex-col space-y-4">
                                     <div className="flex h-full flex-col justify-between text-sm">
                                         <div className="flex flex-col space-y-4">
-                                            {mainNavItems.map((item) => (
+                                            {mainNavItems(auth.selectors.current_team).map((item) => (
                                                 <Link key={item.title} href={item.url} className="flex items-center space-x-2 font-medium">
                                                     {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
                                                     <span>{item.title}</span>
@@ -129,13 +100,13 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                         </Sheet>
                     </div>
 
-                    <TeamSwitcher teams={data.teams} />
+                    <TeamSwitcher currentTeam={auth.selectors.current_team} teams={auth.selectors.teams} />
 
                     {/* Desktop Navigation */}
                     <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
                         <NavigationMenu className="flex h-full items-stretch">
                             <NavigationMenuList className="flex h-full items-stretch space-x-2">
-                                {mainNavItems.map((item, index) => (
+                                {mainNavItems(auth.selectors.current_team).map((item, index) => (
                                     <NavigationMenuItem key={index} className="relative flex h-full items-center">
                                         <Link
                                             href={item.url}
@@ -189,7 +160,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="size-10 rounded-full p-1">
                                     <Avatar className="size-8 overflow-hidden rounded-full">
-                                        <AvatarImage src={auth.user.profile_photo_url} alt={auth.user.name} />
+                                        <AvatarImage src={auth.user.avatar} alt={auth.user.name} />
                                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                             {getInitials(auth.user.name)}
                                         </AvatarFallback>

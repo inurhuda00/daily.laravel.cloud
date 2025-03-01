@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Laravel\Fortify\Features;
@@ -39,12 +38,9 @@ final class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
-
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'quote' => ['message' => mb_trim($message), 'author' => mb_trim($author)],
             'auth' => [
                 'user' => function () use ($request) {
                     if (! $user = $request->user()) {
@@ -55,6 +51,16 @@ final class HandleInertiaRequests extends Middleware
                         'two_factor_enabled' => Features::enabled(Features::twoFactorAuthentication())
                             && ! is_null($user->two_factor_secret),
                     ]);
+                },
+                'selectors' => function () use ($request) {
+                    if (! $user = $request->user()) {
+                        return;
+                    }
+
+                    return [
+                        'current_team' => $user->currentTeam,
+                        'teams' => $user->allTeams(),
+                    ];
                 },
             ],
         ];
