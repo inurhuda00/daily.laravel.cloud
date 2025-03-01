@@ -43,14 +43,16 @@ final class CreateNewUser implements CreatesNewUsers
     {
         $user->ownedTeams()->save(Team::forceCreate([
             'user_id' => $user->id,
-            'name' => $name = explode(' ', $user->name, 2)[0],
-            'slug' => $this->generateUniqueSlug($name),
+            'name' => explode(' ', $user->name, 2)[0] . "'s Team",
+            'slug' => $this->generateUniqueSlug($user->name),
             'personal_team' => true,
         ]));
     }
 
     private function generateUniqueSlug(string $baseSlug): string
     {
+        $nameParts = explode(' ', $baseSlug);
+        $baseSlug = implode('-', array_slice($nameParts, 0, 2));
         $slug = $baseSlug;
         $count = 1;
 
@@ -59,6 +61,6 @@ final class CreateNewUser implements CreatesNewUsers
             $count++;
         }
 
-        return $slug;
+        return strtolower($slug);
     }
 }
