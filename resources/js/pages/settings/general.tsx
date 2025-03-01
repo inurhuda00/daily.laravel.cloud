@@ -1,7 +1,7 @@
 import type { BreadcrumbItem, SharedData } from '@/types';
 
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import type { FormEventHandler } from 'react';
+import { Fragment, type FormEventHandler } from 'react';
 
 import DeleteUser from '@/components/delete-user';
 import HeadingSmall from '@/components/heading-small';
@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function General({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
+const General = ({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) => {
     const { auth } = usePage<SharedData>().props;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
@@ -38,7 +38,7 @@ export default function General({ mustVerifyEmail, status }: { mustVerifyEmail: 
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <Fragment>
             <Head title="Profile settings" />
 
             <SettingsLayout>
@@ -116,6 +116,10 @@ export default function General({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
                 <DeleteUser />
             </SettingsLayout>
-        </AppLayout>
+        </Fragment>
     );
-}
+};
+
+General.layout = (page: React.ReactNode) => <AppLayout breadcrumbs={breadcrumbs}>{page}</AppLayout>;
+
+export default General;

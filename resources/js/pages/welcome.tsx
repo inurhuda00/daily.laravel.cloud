@@ -1,4 +1,4 @@
-import { type SharedData } from '@/types';
+import type { SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 
 export default function Welcome() {
@@ -60,9 +60,12 @@ export default function Welcome() {
                                             href="https://laravel.com/docs"
                                             target="_blank"
                                             className="ml-1 inline-flex items-center space-x-1 font-medium text-[#f53003] underline underline-offset-4 dark:text-[#FF4433]"
+                                            rel="noreferrer"
                                         >
                                             <span>Documentation</span>
                                             <svg
+                                                role="graphics-symbol"
+                                                aria-label="External Link"
                                                 width={10}
                                                 height={11}
                                                 viewBox="0 0 10 11"
@@ -91,9 +94,12 @@ export default function Welcome() {
                                             href="https://laracasts.com"
                                             target="_blank"
                                             className="ml-1 inline-flex items-center space-x-1 font-medium text-[#f53003] underline underline-offset-4 dark:text-[#FF4433]"
+                                            rel="noreferrer"
                                         >
                                             <span>Laracasts</span>
                                             <svg
+                                                role="graphics-symbol"
+                                                aria-label="External Link"
                                                 width={10}
                                                 height={11}
                                                 viewBox="0 0 10 11"
@@ -116,6 +122,7 @@ export default function Welcome() {
                                     <a
                                         href="https://cloud.laravel.com"
                                         target="_blank"
+                                        rel="noreferrer"
                                         className="inline-block rounded-sm border border-black bg-[#1b1b18] px-5 py-1.5 text-sm leading-normal text-white hover:border-black hover:bg-black dark:border-[#eeeeec] dark:bg-[#eeeeec] dark:text-[#1C1C1A] dark:hover:border-white dark:hover:bg-white"
                                     >
                                         Deploy now
@@ -125,6 +132,8 @@ export default function Welcome() {
                         </div>
                         <div className="relative -mb-px aspect-[335/376] w-full shrink-0 overflow-hidden rounded-t-lg bg-[#fff2f2] lg:mb-0 lg:-ml-px lg:aspect-auto lg:w-[438px] lg:rounded-t-none lg:rounded-r-lg dark:bg-[#1D0002]">
                             <svg
+                                role="graphics-symbol"
+                                aria-label="External Link"
                                 className="w-full max-w-none translate-y-0 text-[#F53003] opacity-100 transition-all duration-750 dark:text-[#F61500] starting:translate-y-6 starting:opacity-0"
                                 viewBox="0 0 438 104"
                                 fill="none"
@@ -151,6 +160,8 @@ export default function Welcome() {
                                 />
                             </svg>
                             <svg
+                                role="graphics-symbol"
+                                aria-label="External Link"
                                 className="relative -mt-[4.9rem] -ml-8 w-[448px] max-w-none lg:-mt-[6.6rem] lg:ml-0 dark:hidden"
                                 viewBox="0 0 440 376"
                                 fill="none"
@@ -218,7 +229,7 @@ export default function Welcome() {
                                     />
                                 </g>
                                 <g
-                                    style={{ mixBlendMode: 'plus-darker' }}
+                                    style={{ mixBlendMode: 'multiply' }}
                                     className="translate-y-0 opacity-100 transition-all delay-300 duration-750 starting:translate-y-4 starting:opacity-0"
                                 >
                                     <path
@@ -471,6 +482,8 @@ export default function Welcome() {
                                 </g>
                             </svg>
                             <svg
+                                role="graphics-symbol"
+                                aria-label="External Link"
                                 className="relative -mt-[4.9rem] -ml-8 hidden w-[448px] max-w-none lg:-mt-[6.6rem] lg:ml-0 dark:block"
                                 viewBox="0 0 440 376"
                                 fill="none"
@@ -783,7 +796,7 @@ export default function Welcome() {
                         </div>
                     </main>
                 </div>
-                <div className="hidden h-14.5 lg:block"></div>
+                <div className="hidden h-14.5 lg:block" />
             </div>
         </>
     );

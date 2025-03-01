@@ -5,9 +5,9 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import { type FormEventHandler, useRef, useState } from 'react';
+import { type FormEventHandler, Fragment, type ReactNode, useRef, useState } from 'react';
 
-export default function TwoFactorChallenge({ status }: { status?: string }) {
+const TwoFactorChallenge = ({ status }: { status?: string }) => {
     const [recovery, setRecovery] = useState(false);
     const recoveryCodeInput = useRef<HTMLInputElement>(null);
     const codeInput = useRef<HTMLInputElement>(null);
@@ -35,7 +35,7 @@ export default function TwoFactorChallenge({ status }: { status?: string }) {
         post(route('two-factor.login'));
     };
     return (
-        <AuthLayout title="Two Factor Authentication" description="Complete The Step">
+        <Fragment>
             <Head title="Two Factor Authentication" />
             <div className="text-sm text-gray-600 dark:text-gray-400">
                 {recovery
@@ -90,6 +90,14 @@ export default function TwoFactorChallenge({ status }: { status?: string }) {
                     </Button>
                 </div>
             </form>
-        </AuthLayout>
+        </Fragment>
     );
-}
+};
+
+TwoFactorChallenge.layout = (page: ReactNode) => (
+    <AuthLayout title="Two Factor Authentication" description="Complete The Step">
+        {page}
+    </AuthLayout>
+);
+
+export default TwoFactorChallenge;

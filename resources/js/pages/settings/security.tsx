@@ -7,6 +7,7 @@ import SettingsLayout from '@/layouts/settings/layout';
 
 import BrowserSessions from '@/components/browser-sessions';
 import TwoFactorAuthentication from '@/components/two-factor-auth';
+import { Fragment } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -15,15 +16,19 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Security({ sessions, requiresConfirmation }: { sessions: Array<SessionInfo>; requiresConfirmation: boolean }) {
+const Security = ({ sessions, requiresConfirmation }: { sessions: Array<SessionInfo>; requiresConfirmation: boolean }) => {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <Fragment>
             <Head title="Security" />
 
             <SettingsLayout>
                 <TwoFactorAuthentication requiresConfirmation={requiresConfirmation} />
                 <BrowserSessions sessions={sessions} />
             </SettingsLayout>
-        </AppLayout>
+        </Fragment>
     );
-}
+};
+
+Security.layout = (page: React.ReactNode) => <AppLayout breadcrumbs={breadcrumbs}>{page}</AppLayout>;
+
+export default Security;

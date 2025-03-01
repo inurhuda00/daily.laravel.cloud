@@ -1,7 +1,7 @@
 // Components
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import type { FormEventHandler } from 'react';
+import { Fragment, type FormEventHandler, type ReactNode } from 'react';
 
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 
-export default function ConfirmPassword() {
+const ConfirmPassword = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
         password: '',
     });
@@ -23,10 +23,7 @@ export default function ConfirmPassword() {
     };
 
     return (
-        <AuthLayout
-            title="Confirm your password"
-            description="This is a secure area of the application. Please confirm your password before continuing."
-        >
+        <Fragment>
             <Head title="Confirm password" />
 
             <form onSubmit={submit}>
@@ -55,6 +52,14 @@ export default function ConfirmPassword() {
                     </div>
                 </div>
             </form>
-        </AuthLayout>
+        </Fragment>
     );
-}
+};
+
+ConfirmPassword.layout = (page: ReactNode) => (
+    <AuthLayout title="Confirm your password" description="This is a secure area of the application. Please confirm your password before continuing.">
+        {page}
+    </AuthLayout>
+);
+
+export default ConfirmPassword;

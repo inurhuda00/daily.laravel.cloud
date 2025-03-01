@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import type { FormEventHandler } from 'react';
+import { Fragment, type FormEventHandler, type ReactNode } from 'react';
 
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,7 @@ interface ResetPasswordForm {
     password_confirmation: string;
 }
 
-export default function ResetPassword({ token, email }: ResetPasswordProps) {
+const ResetPassword = ({ token, email }: ResetPasswordProps) => {
     const { data, setData, post, processing, errors, reset } = useForm<ResetPasswordForm>({
         token: token,
         email: email,
@@ -36,7 +36,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
     };
 
     return (
-        <AuthLayout title="Reset password" description="Please enter your new password below">
+        <Fragment>
             <Head title="Reset password" />
 
             <form onSubmit={submit}>
@@ -93,6 +93,14 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                     </Button>
                 </div>
             </form>
-        </AuthLayout>
+        </Fragment>
     );
-}
+};
+
+ResetPassword.layout = (page: ReactNode) => (
+    <AuthLayout title="Reset password" description="Please enter your new password below">
+        {page}
+    </AuthLayout>
+);
+
+export default ResetPassword;

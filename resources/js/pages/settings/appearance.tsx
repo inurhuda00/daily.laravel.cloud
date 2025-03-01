@@ -7,6 +7,7 @@ import type { BreadcrumbItem } from '@/types';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { Fragment } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -15,9 +16,9 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Appearance() {
+const Appearance = () => {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <Fragment>
             <Head title="Appearance settings" />
 
             <SettingsLayout>
@@ -27,6 +28,10 @@ export default function Appearance() {
                     <AppearanceTabs />
                 </div>
             </SettingsLayout>
-        </AppLayout>
+        </Fragment>
     );
-}
+};
+
+Appearance.layout = (page: React.ReactNode) => <AppLayout breadcrumbs={breadcrumbs}>{page}</AppLayout>;
+
+export default Appearance;

@@ -1,13 +1,13 @@
 // Components
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import type { FormEventHandler } from 'react';
+import { Fragment, type FormEventHandler, type ReactNode } from 'react';
 
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import AuthLayout from '@/layouts/auth-layout';
 
-export default function VerifyEmail({ status }: { status?: string }) {
+const VerifyEmail = ({ status }: { status?: string }) => {
     const { post, processing } = useForm({});
 
     const submit: FormEventHandler = (e) => {
@@ -17,7 +17,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
     };
 
     return (
-        <AuthLayout title="Verify email" description="Please verify your email address by clicking on the link we just emailed to you.">
+        <Fragment>
             <Head title="Email verification" />
 
             {status === 'verification-link-sent' && (
@@ -36,6 +36,14 @@ export default function VerifyEmail({ status }: { status?: string }) {
                     Log out
                 </TextLink>
             </form>
-        </AuthLayout>
+        </Fragment>
     );
-}
+};
+
+VerifyEmail.layout = (page: ReactNode) => (
+    <AuthLayout title="Verify email" description="Please verify your email address by clicking on the link we just emailed to you.">
+        {page}
+    </AuthLayout>
+);
+
+export default VerifyEmail;

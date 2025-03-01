@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import type { FormEventHandler } from 'react';
+import { Fragment, type FormEventHandler, type ReactNode } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -16,7 +16,7 @@ interface RegisterForm {
     password_confirmation: string;
 }
 
-export default function Register() {
+const Register = () => {
     const { data, setData, post, processing, errors, reset } = useForm<RegisterForm>({
         name: '',
         email: '',
@@ -32,7 +32,7 @@ export default function Register() {
     };
 
     return (
-        <AuthLayout title="Create an account" description="Enter your details below to create your account">
+        <Fragment>
             <Head title="Register" />
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
@@ -114,6 +114,14 @@ export default function Register() {
                     </TextLink>
                 </div>
             </form>
-        </AuthLayout>
+        </Fragment>
     );
-}
+};
+
+Register.layout = (page: ReactNode) => (
+    <AuthLayout title="Create an account" description="Enter your details below to create your account">
+        {page}
+    </AuthLayout>
+);
+
+export default Register;
