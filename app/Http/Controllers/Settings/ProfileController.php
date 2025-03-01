@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Settings;
 
+use App\Actions\DeleteUserWithTeams;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\Fortify\Actions\ConfirmPassword;
 
 final class ProfileController extends Controller
 {
@@ -45,17 +49,29 @@ final class ProfileController extends Controller
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request, StatefulGuard $guard): RedirectResponse
     {
         $request->validate([
             'password' => ['required', 'current_password'],
         ]);
 
+        $confirmed = app(ConfirmPassword::class)(
+            $guard,
+            $request->user(),
+            $request->password
+        );
+
+        if (! $confirmed) {
+            throw ValidationException::withMessages([
+                'password' => 'The password is incorrect.',
+            ]);
+        }
+
         $user = $request->user();
 
-        Auth::logout();
+        app(DeleteUserWithTeams::class)->delete($user->fresh());
 
-        $user->delete();
+        $guard->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

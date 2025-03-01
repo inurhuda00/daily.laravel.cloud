@@ -38,8 +38,6 @@ Route::middleware(['auth', 'verified', AuthenticateSession::class])->group(funct
 
     Route::delete('/user/profile-photo', [ProfilePhotoController::class, 'destroy'])->name('current-user-photo.destroy');
 
-    Route::delete('/user', [CurrentUserController::class, 'destroy'])->name('current-user.destroy');
-
     Route::group(['middleware' => 'verified'], function () {
         // API...
         // Route::get('/user/api-tokens', [ApiTokenController::class, 'index'])->name('api-tokens.index');
