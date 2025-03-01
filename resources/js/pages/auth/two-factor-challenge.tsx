@@ -7,7 +7,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { type FormEventHandler, Fragment, type ReactNode, useRef, useState } from 'react';
 
-const TwoFactorChallenge = ({ status }: { status?: string }) => {
+const TwoFactorChallenge = () => {
     const [recovery, setRecovery] = useState(false);
     const recoveryCodeInput = useRef<HTMLInputElement>(null);
     const codeInput = useRef<HTMLInputElement>(null);

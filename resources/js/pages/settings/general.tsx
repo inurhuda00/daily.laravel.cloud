@@ -24,7 +24,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 const General = ({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) => {
     const { auth } = usePage<SharedData>().props;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, patch, errors, processing } = useForm({
         name: auth.user.name,
         email: auth.user.email,
     });

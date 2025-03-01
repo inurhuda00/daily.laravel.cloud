@@ -9,7 +9,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Separator } from './ui/separator';
 
-export default function TwoFactorAuthentication({ requiresConfirmation }: { requiresConfirmation: boolean }) {
+export default function TwoFactorAuthentication() {
     const { auth } = usePage<SharedData>().props;
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(auth.user.two_factor_enabled ?? false);
     const [qrCode, setQrCode] = useState(null);
@@ -110,7 +110,7 @@ export default function TwoFactorAuthentication({ requiresConfirmation }: { requ
             </div>
             {twoFactorEnabled && qrCode && (
                 <div className="grid gap-2">
-                    {/* @ts-ignore */}
+                    {/* @ts-expect-error : <from bagerror> */}
                     <InputError message={errors.confirmTwoFactorAuthentication?.code} />
                     <p className="text-muted-foreground py-2 text-sm">Scan the QR code or enter the setup key into your authenticator app.</p>
                     {/* biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation> */}

@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\CurrentTeamController;
-use App\Http\Controllers\CurrentUserController;
 use App\Http\Controllers\OtherBrowserSessionsController;
 use App\Http\Controllers\ProfilePhotoController;
 use App\Http\Controllers\SecurityController;

@@ -23,7 +23,7 @@ const Password = () => {
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
 
-    const { data, setData, errors, put, reset, processing, recentlySuccessful } = useForm({
+    const { data, setData, errors, put, reset, processing } = useForm({
         current_password: '',
         password: '',
         password_confirmation: '',

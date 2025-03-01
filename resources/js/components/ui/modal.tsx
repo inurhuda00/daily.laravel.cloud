@@ -11,11 +11,9 @@ export default function Modal({
   onClose,
   preventDefaultClose,
   className,
-  dialogOnly,
 }: {
   children: React.ReactNode
   className?: string
-  dialogOnly?: boolean
   showModal?: boolean
   setShowModal?: Dispatch<SetStateAction<boolean>>
   onClose?: () => void
