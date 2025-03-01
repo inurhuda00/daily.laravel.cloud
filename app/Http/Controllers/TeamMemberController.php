@@ -12,9 +12,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 final class TeamMemberController extends Controller
 {
+    public function show(Team $team, Request $request)
+    {
+        return Inertia::render('teams/settings/members');
+    }
+
     /**
      * Add a new team member to a team.
      *
@@ -73,7 +79,7 @@ final class TeamMemberController extends Controller
         );
 
         if ($request->user()->id === $user->id) {
-            return Redirect::route('dashboard', $user->currentTeam);
+            return Redirect::route('team.dashboard', $user->currentTeam);
         }
 
         return back(303);

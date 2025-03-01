@@ -23,7 +23,7 @@ const mainNavItems: (currentTeam: Team) => NavItem[] = (currentTeam: Team) => [
     },
     {
         title: 'Settings',
-        url: `/${currentTeam.slug}/dashboard`,
+        url: `/${currentTeam.slug}/settings`,
         icon: Settings,
     },
 ];

@@ -20,6 +20,16 @@ final class TeamController extends Controller
 {
     use RedirectsActions;
 
+    public function dashboard(Team $team, Request $request)
+    {
+        return Inertia::render('teams/dashboard');
+    }
+
+    public function settings(Team $team, Request $request)
+    {
+        return Inertia::render('teams/settings/general');
+    }
+
     /**
      * Show the team management screen.
      *

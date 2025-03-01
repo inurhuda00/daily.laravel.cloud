@@ -41,7 +41,7 @@ export function TeamSwitcher({ currentTeam, teams }: { currentTeam: Team; teams:
             <CreateTeamModal />
             <div className="flex items-center gap-2">
                 <Button asChild variant="ghost" size="sm">
-                    <Link href={route('dashboard', currentTeam.slug)} className="flex items-center gap-2">
+                    <Link href={route('team.dashboard', currentTeam.slug)} className="flex items-center gap-2">
                         <div className="text-left text-sm leading-tight">
                             <span className="truncate">{currentTeam.name}</span>
                         </div>
