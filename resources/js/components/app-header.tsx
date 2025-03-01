@@ -18,12 +18,12 @@ import { TeamSwitcher } from './team-switcher';
 const mainNavItems: (currentTeam: Team) => NavItem[] = (currentTeam: Team) => [
     {
         title: 'Overview',
-        url: route('dashboard', currentTeam.slug),
+        url: `/${currentTeam.slug}/dashboard`,
         icon: LayoutGrid,
     },
     {
         title: 'Settings',
-        url: route('dashboard', currentTeam.slug),
+        url: `/${currentTeam.slug}/dashboard`,
         icon: Settings,
     },
 ];
@@ -51,6 +51,8 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
+
+    console.log(page.url, mainNavItems(auth.selectors.current_team));
 
     return (
         <>

@@ -6,6 +6,7 @@ namespace App;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 trait RedirectsActions
@@ -14,18 +15,21 @@ trait RedirectsActions
      * Get the redirect response for the given action.
      *
      * @param  mixed  $action
-     * @return Response
      */
     public function redirectPath($action): RedirectResponse|Response
     {
         if (method_exists($action, 'redirectTo')) {
             $response = $action->redirectTo();
-        } else {
-            $response = property_exists($action, 'redirectTo')
-                ? $action->redirectTo
-                : Redirect::to("/{$action->currentTeam->slug}/dashboard", 303);
+
+            return $response instanceof Response ? $response : Redirect::to($response, 303);
         }
 
-        return $response instanceof Response ? $response : Redirect::to($response, 303);
+        if (property_exists($action, 'redirectTo')) {
+            return Redirect::to($action->redirectTo, 303);
+        }
+
+        $user = Auth::user();
+
+        return Redirect::to("/{$user->currentTeam->slug}/dashboard", 303);
     }
 }

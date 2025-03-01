@@ -47,7 +47,7 @@ final class FortifyServiceProvider extends ServiceProvider
         {
             public function toResponse($request)
             {
-                return Redirect::to("/{$request->user()->currentTeam->slug}/dashboard", 303);
+                return Redirect::route('dashboard', $request->user()->currentTeam);
             }
         });
 

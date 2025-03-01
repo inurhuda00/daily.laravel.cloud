@@ -24,6 +24,6 @@ final class CurrentTeamController extends Controller
             abort(403);
         }
 
-        return Redirect::to("/{$request->user()->currentTeam->slug}/dashboard", 303);
+        return Redirect::route('dashboard', $team);
     }
 }

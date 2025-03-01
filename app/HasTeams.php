@@ -64,7 +64,7 @@ trait HasTeams
      */
     public function allTeams()
     {
-        return $this->ownedTeams->merge($this->teams)->sortBy('name');
+        return $this->ownedTeams->merge($this->teams)->sortBy('name')->values();
     }
 
     /**

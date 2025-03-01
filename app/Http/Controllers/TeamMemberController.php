@@ -73,7 +73,7 @@ final class TeamMemberController extends Controller
         );
 
         if ($request->user()->id === $user->id) {
-            return Redirect::to("/{$request->user()->currentTeam->slug}/dashboard", 303);
+            return Redirect::route('dashboard', $user->currentTeam);
         }
 
         return back(303);

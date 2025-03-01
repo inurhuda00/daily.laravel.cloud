@@ -11,9 +11,9 @@ use App\Actions\ValidateTeamDeletion;
 use App\Models\Team;
 use App\RedirectsActions;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
 final class TeamController extends Controller
@@ -23,7 +23,6 @@ final class TeamController extends Controller
     /**
      * Show the team management screen.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $teamId
      * @return \Inertia\Response
      */
@@ -51,7 +50,6 @@ final class TeamController extends Controller
     /**
      * Show the team creation screen.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response
      */
     public function create(Request $request)
@@ -64,7 +62,6 @@ final class TeamController extends Controller
     /**
      * Create a new team.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse|Response
@@ -79,7 +76,6 @@ final class TeamController extends Controller
     /**
      * Update the given team's name.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $teamId
      * @return RedirectResponse
      */
@@ -95,7 +91,6 @@ final class TeamController extends Controller
     /**
      * Delete the given team.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $teamId
      * @return RedirectResponse
      */
