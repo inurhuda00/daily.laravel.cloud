@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 final class TeamController extends Controller
@@ -58,18 +59,6 @@ final class TeamController extends Controller
     }
 
     /**
-     * Show the team creation screen.
-     *
-     * @return \Inertia\Response
-     */
-    public function create(Request $request)
-    {
-        Gate::authorize('create', Team::class);
-
-        return Inertia::render('Teams/Create');
-    }
-
-    /**
      * Create a new team.
      *
      * @return RedirectResponse
@@ -95,7 +84,7 @@ final class TeamController extends Controller
 
         app(UpdateTeamName::class)->update($request->user(), $team, $request->all());
 
-        return back(303);
+        return Redirect::intended(route('teams.settings', $team));
     }
 
     /**
@@ -106,13 +95,16 @@ final class TeamController extends Controller
      */
     public function destroy(Request $request, $teamId): RedirectResponse|Response
     {
+        $user = $request->user();
         $team = Team::findOrFail($teamId);
 
-        app(ValidateTeamDeletion::class)->validate($request->user(), $team);
+        app(ValidateTeamDeletion::class)->validate($user, $team);
 
         $deleter = app(DeleteTeam::class);
 
         $deleter->delete($team);
+
+        $user->switchTeam($user->personalTeam());
 
         return $this->redirectPath($deleter);
     }

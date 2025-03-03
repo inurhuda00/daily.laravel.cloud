@@ -40,7 +40,7 @@ final class FortifyServiceProvider extends ServiceProvider
         {
             public function toResponse($request)
             {
-                return Redirect::intended(route('team.dashboard', $request->user()->currentTeam), 303);
+                return Redirect::intended(route('teams.dashboard', $request->user()->currentTeam), 303);
             }
         });
 
@@ -48,7 +48,7 @@ final class FortifyServiceProvider extends ServiceProvider
         {
             public function toResponse($request)
             {
-                return Redirect::route('team.dashboard', $request->user()->currentTeam);
+                return Redirect::route('teams.dashboard', $request->user()->currentTeam);
             }
         });
 
@@ -56,7 +56,7 @@ final class FortifyServiceProvider extends ServiceProvider
         {
             public function toResponse($request)
             {
-                return Redirect::intended(route('team.dashboard', $request->user()->currentTeam).'?verified=1', 303);
+                return Redirect::intended(route('teams.dashboard', $request->user()->currentTeam).'?verified=1', 303);
             }
         });
 

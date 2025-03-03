@@ -39,7 +39,7 @@ test('email can be verified', function () {
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
     expect($user->currentTeam)->not->toBeNull();
     expect($user->currentTeam->slug)->not->toBeNull();
-    $response->assertRedirect(route('team.dashboard', ['team' => $user->currentTeam->slug], absolute: false).'?verified=1');
+    $response->assertRedirect(route('teams.dashboard', ['team' => $user->currentTeam->slug], absolute: false).'?verified=1');
 });
 
 test('email is not verified with invalid hash', function () {

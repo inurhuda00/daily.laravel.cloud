@@ -32,7 +32,7 @@ test('users can authenticate using the login screen', function () {
 
     $this->assertAuthenticated();
 
-    $response->assertRedirect(route('team.dashboard', ['team' => $user->currentTeam->slug], absolute: false));
+    $response->assertRedirect(route('teams.dashboard', ['team' => $user->currentTeam->slug], absolute: false));
 });
 
 test('users can not authenticate with invalid password', function () {
