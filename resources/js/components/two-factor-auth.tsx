@@ -25,13 +25,14 @@ export default function TwoFactorAuthentication({ requiresConfirmation = false }
         try {
             setProcessing(true);
 
-            await axios.post(route('two-factor.enable'));
             const status = await axios.get(route('password.confirmation'));
 
             if (requiresConfirmation && !status.data.confirmed) {
                 setConfirmPasswordModal(true);
                 return;
             }
+
+            await axios.post(route('two-factor.enable'));
 
             setTwoFactorEnabled(true);
             setTwoFactorSetupModal(true);
