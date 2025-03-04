@@ -50,48 +50,50 @@ const General = () => {
         <Fragment>
             <Head title="Team Settings" />
             <TeamSettingsLayout team={team}>
-                <HeadingSmall title="General" description="General settings related to this organization." />
-                <Separator />
-                <form onSubmit={handleUpdateTeam} className="space-y-6">
-                    <div className="grid gap-2">
-                        <Label htmlFor="name">Team name</Label>
-                        <div className="mt-1">
-                            <Input
-                                id="name"
-                                className="block w-full"
-                                value={data.name}
-                                onChange={(e) => setData('name', e.target.value)}
-                                required
-                                placeholder="Team name"
-                            />
-                            <InputError className="mt-2" message={errors.name} />
-                            <span className="text-muted-foreground mt-1 block text-[0.8rem]">The display name for your team.</span>
+                <div className="space-y-6">
+                    <HeadingSmall title="General" description="General settings related to this organization." />
+                    <Separator />
+                    <form onSubmit={handleUpdateTeam} className="space-y-6">
+                        <div className="grid gap-2">
+                            <Label htmlFor="name">Team name</Label>
+                            <div className="mt-1">
+                                <Input
+                                    id="name"
+                                    className="block w-full"
+                                    value={data.name}
+                                    onChange={(e) => setData('name', e.target.value)}
+                                    required
+                                    placeholder="Team name"
+                                />
+                                <InputError className="mt-2" message={errors.name} />
+                                <span className="text-muted-foreground mt-1 block text-[0.8rem]">The display name for your team.</span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="slug">Team handle</Label>
-                        <div className="mt-1">
-                            <Input
-                                id="slug"
-                                className="block w-full"
-                                value={data.slug}
-                                onChange={(e) => setData('slug', e.target.value)}
-                                required
-                                placeholder="team-handle"
-                            />
-                            <InputError className="mt-2" message={errors.slug} />
-                            <span className="text-muted-foreground mt-1 block text-[0.8rem]">
-                                Used in your team's URL: example.com/{data.slug}/dashboard
-                            </span>
+                        <div className="grid gap-2">
+                            <Label htmlFor="slug">Team handle</Label>
+                            <div className="mt-1">
+                                <Input
+                                    id="slug"
+                                    className="block w-full"
+                                    value={data.slug}
+                                    onChange={(e) => setData('slug', e.target.value)}
+                                    required
+                                    placeholder="team-handle"
+                                />
+                                <InputError className="mt-2" message={errors.slug} />
+                                <span className="text-muted-foreground mt-1 block text-[0.8rem]">
+                                    Used in your team's URL: example.com/{data.slug}/dashboard
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <Button type="submit" disabled={processing}>
-                            {processing && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-                            Save Changes
-                        </Button>
-                    </div>
-                </form>
+                        <div className="flex items-center gap-4">
+                            <Button type="submit" disabled={processing}>
+                                {processing && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+                                Save Changes
+                            </Button>
+                        </div>
+                    </form>
+                </div>
 
                 <DeleteTeam team={team} />
             </TeamSettingsLayout>

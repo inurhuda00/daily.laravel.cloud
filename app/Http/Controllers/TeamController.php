@@ -10,12 +10,14 @@ use App\Actions\UpdateTeamName;
 use App\Actions\ValidateTeamDeletion;
 use App\Models\Team;
 use App\RedirectsActions;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
+use Laravel\Fortify\Actions\ConfirmPassword;
 
 final class TeamController extends Controller
 {
@@ -29,33 +31,6 @@ final class TeamController extends Controller
     public function settings(Team $team, Request $request)
     {
         return Inertia::render('teams/settings/general');
-    }
-
-    /**
-     * Show the team management screen.
-     *
-     * @param  int  $teamId
-     * @return \Inertia\Response
-     */
-    public function show(Request $request, $teamId)
-    {
-        $team = Team::findOrFail($teamId);
-
-        Gate::authorize('view', $team);
-
-        return Inertia::render('Teams/Show', [
-            'team' => $team->load('owner', 'users', 'teamInvitations'),
-            // 'availableRoles' => array_values(Jetstream::$roles),
-            // 'availablePermissions' => Jetstream::$permissions,
-            // 'defaultPermissions' => Jetstream::$defaultPermissions,
-            'permissions' => [
-                'canAddTeamMembers' => Gate::check('addTeamMember', $team),
-                'canDeleteTeam' => Gate::check('delete', $team),
-                'canRemoveTeamMembers' => Gate::check('removeTeamMember', $team),
-                'canUpdateTeam' => Gate::check('update', $team),
-                'canUpdateTeamMembers' => Gate::check('updateTeamMember', $team),
-            ],
-        ]);
     }
 
     /**
@@ -93,10 +68,22 @@ final class TeamController extends Controller
      * @param  int  $teamId
      * @return RedirectResponse
      */
-    public function destroy(Request $request, $teamId): RedirectResponse|Response
+    public function destroy(Request $request, $teamId, StatefulGuard $guard): RedirectResponse|Response
     {
         $user = $request->user();
         $team = Team::findOrFail($teamId);
+
+        $confirmed = app(ConfirmPassword::class)(
+            $guard,
+            $request->user(),
+            $request->password
+        );
+
+        if (! $confirmed) {
+            throw ValidationException::withMessages([
+                'password' => 'The password is incorrect.',
+            ])->errorBag('deleteTeam');
+        }
 
         app(ValidateTeamDeletion::class)->validate($user, $team);
 

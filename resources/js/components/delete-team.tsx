@@ -24,7 +24,13 @@ export default function DeleteTeam({ team }: { team: Team }) {
         destroy(route('teams.destroy', team.id), {
             errorBag: 'deleteTeam',
             preserveScroll: true,
-            onSuccess: () => closeModal(),
+            onSuccess: () => {
+                closeModal();
+                toast('Team Deleted', {
+                    description: 'Your team has been deleted successfully.',
+                    icon: <CheckCircle2 className="h-4 w-4" />,
+                });
+            },
             onError: () => passwordInput.current?.focus(),
             onFinish: () => reset(),
         });
@@ -33,10 +39,6 @@ export default function DeleteTeam({ team }: { team: Team }) {
     const closeModal = () => {
         clearErrors();
         reset();
-        toast('Team Deleted', {
-            description: 'Your team has been deleted successfully.',
-            icon: <CheckCircle2 className="h-4 w-4" />,
-        });
     };
 
     return (
@@ -83,7 +85,7 @@ export default function DeleteTeam({ team }: { team: Team }) {
 
                             <DialogFooter>
                                 <DialogClose asChild>
-                                    <Button variant="secondary" onClick={closeModal}>
+                                    <Button type="button" variant="secondary" onClick={closeModal}>
                                         Cancel
                                     </Button>
                                 </DialogClose>

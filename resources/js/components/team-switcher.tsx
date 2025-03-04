@@ -12,8 +12,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import type { Team } from '@/types';
 import { Link, useForm } from '@inertiajs/react';
-import { useCreateTeamModal } from './create-team-modal';
 import { Icon } from './icon';
+import { useCreateTeamModal } from './modal/create-team-modal';
 import { Button } from './ui/button';
 
 export function TeamSwitcher({ currentTeam, teams }: { currentTeam: Team; teams: Team[] }) {

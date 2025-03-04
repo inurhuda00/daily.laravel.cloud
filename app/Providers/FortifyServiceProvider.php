@@ -9,6 +9,7 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Redirect;
@@ -17,6 +18,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\PasswordConfirmedResponse;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\VerifyEmailResponse;
 use Laravel\Fortify\Fortify;
@@ -40,7 +42,9 @@ final class FortifyServiceProvider extends ServiceProvider
         {
             public function toResponse($request)
             {
-                return Redirect::intended(route('teams.dashboard', $request->user()->currentTeam), 303);
+                return $request->wantsJson()
+                    ? new JsonResponse('', 201)
+                    : Redirect::intended(route('teams.dashboard', $request->user()->currentTeam), 303);
             }
         });
 
@@ -48,7 +52,9 @@ final class FortifyServiceProvider extends ServiceProvider
         {
             public function toResponse($request)
             {
-                return Redirect::route('teams.dashboard', $request->user()->currentTeam);
+                return $request->wantsJson()
+                    ? new JsonResponse('', 201)
+                    : Redirect::route('teams.dashboard', $request->user()->currentTeam);
             }
         });
 
@@ -56,7 +62,19 @@ final class FortifyServiceProvider extends ServiceProvider
         {
             public function toResponse($request)
             {
-                return Redirect::intended(route('teams.dashboard', $request->user()->currentTeam).'?verified=1', 303);
+                return $request->wantsJson()
+                    ? new JsonResponse('', 201)
+                    : Redirect::intended(route('teams.dashboard', $request->user()->currentTeam).'?verified=1', 303);
+            }
+        });
+
+        $this->app->instance(PasswordConfirmedResponse::class, new class implements PasswordConfirmedResponse
+        {
+            public function toResponse($request)
+            {
+                return $request->wantsJson()
+                    ? new JsonResponse('', 201)
+                    : Redirect::intended(route('teams.dashboard', $request->user()->currentTeam), 303);
             }
         });
 
