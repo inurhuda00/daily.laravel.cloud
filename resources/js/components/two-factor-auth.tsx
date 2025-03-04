@@ -30,7 +30,6 @@ export default function TwoFactorAuthentication() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: async () => {
-                setTwoFactorEnabled(true);
                 await fetchQrCodeAndRecoveryCodes();
             },
         });
@@ -46,6 +45,8 @@ export default function TwoFactorAuthentication() {
             setQrCode(qrResponse.data.svg);
             setSetupKey(keyResponse.data.secretKey);
             setRecoveryCodes(codesResponse.data);
+
+            setTwoFactorEnabled(true);
         } catch (error) {
             console.error('Error fetching 2FA setup data:', error);
         }
