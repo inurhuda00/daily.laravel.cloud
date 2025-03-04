@@ -19,6 +19,7 @@ final class User extends Authenticatable implements MustVerifyEmail
 
     /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory;
+
     use HasProfilePhoto;
     use HasTeams;
     use Notifiable;

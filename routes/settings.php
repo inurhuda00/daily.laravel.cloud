@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\CurrentTeamController;
 use App\Http\Controllers\OtherBrowserSessionsController;
 use App\Http\Controllers\ProfilePhotoController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -33,33 +34,38 @@ Route::middleware(['auth', 'verified', AuthenticateSession::class])->group(funct
     Route::get('settings/security', [SecurityController::class, 'edit'])->name('security.edit');
     Route::put('settings/security', [SecurityController::class, 'update'])->name('security.update');
 
+    Route::get('settings/roles', [RoleController::class, 'manage'])->name('roles.manage');
+    Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('/roles/{role}', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::put('settings/roles', [RoleController::class, 'update'])->name('roles.update');
+    Route::delete('settings/roles', [RoleController::class, 'destroy'])->name('roles.destroy');
+
     Route::delete('/user/other-browser-sessions', [OtherBrowserSessionsController::class, 'destroy'])->name('other-browser-sessions.destroy');
 
     Route::delete('/user/profile-photo', [ProfilePhotoController::class, 'destroy'])->name('current-user-photo.destroy');
 
-    Route::group(['middleware' => 'verified'], function () {
-        // API...
-        // Route::get('/user/api-tokens', [ApiTokenController::class, 'index'])->name('api-tokens.index');
-        // Route::post('/user/api-tokens', [ApiTokenController::class, 'store'])->name('api-tokens.store');
-        // Route::put('/user/api-tokens/{token}', [ApiTokenController::class, 'update'])->name('api-tokens.update');
-        // Route::delete('/user/api-tokens/{token}', [ApiTokenController::class, 'destroy'])->name('api-tokens.destroy');
-        // Teams...
-        Route::get('/teams/create', [TeamController::class, 'create'])->name('teams.create');
-        Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
-        Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show');
-        Route::put('/teams/{team}', [TeamController::class, 'update'])->name('teams.update');
-        Route::delete('/teams/{team}', [TeamController::class, 'destroy'])->name('teams.destroy');
+    // API...
+    // Route::get('/user/api-tokens', [ApiTokenController::class, 'index'])->name('api-tokens.index');
+    // Route::post('/user/api-tokens', [ApiTokenController::class, 'store'])->name('api-tokens.store');
+    // Route::put('/user/api-tokens/{token}', [ApiTokenController::class, 'update'])->name('api-tokens.update');
+    // Route::delete('/user/api-tokens/{token}', [ApiTokenController::class, 'destroy'])->name('api-tokens.destroy');
 
-        Route::put('/current-team', [CurrentTeamController::class, 'update'])->name('current-team.update');
-        Route::post('/teams/{team}/members', [TeamMemberController::class, 'store'])->name('team-members.store');
-        Route::put('/teams/{team}/members/{user}', [TeamMemberController::class, 'update'])->name('team-members.update');
-        Route::delete('/teams/{team}/members/{user}', [TeamMemberController::class, 'destroy'])->name('team-members.destroy');
+    // Teams...
+    Route::get('/teams/create', [TeamController::class, 'create'])->name('teams.create');
+    Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
+    Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show');
+    Route::put('/teams/{team}', [TeamController::class, 'update'])->name('teams.update');
+    Route::delete('/teams/{team}', [TeamController::class, 'destroy'])->name('teams.destroy');
 
-        Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept'])
-            ->middleware(['signed'])
-            ->name('team-invitations.accept');
+    Route::put('/current-team', [CurrentTeamController::class, 'update'])->name('current-team.update');
+    Route::post('/teams/{team}/members', [TeamMemberController::class, 'store'])->name('team-members.store');
+    Route::put('/teams/{team}/members/{user}', [TeamMemberController::class, 'update'])->name('team-members.update');
+    Route::delete('/teams/{team}/members/{user}', [TeamMemberController::class, 'destroy'])->name('team-members.destroy');
 
-        Route::delete('/team-invitations/{invitation}', [TeamInvitationController::class, 'destroy'])
-            ->name('team-invitations.destroy');
-    });
+    Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept'])
+        ->middleware(['signed'])
+        ->name('team-invitations.accept');
+
+    Route::delete('/team-invitations/{invitation}', [TeamInvitationController::class, 'destroy'])
+        ->name('team-invitations.destroy');
 });

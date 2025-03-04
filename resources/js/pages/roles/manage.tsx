@@ -55,7 +55,7 @@ const ManageRolesPage = () => {
                                                     <Checkbox id={`select-all-${modelPermission.model}`} />
                                                     <Label
                                                         htmlFor={`select-all-${modelPermission.model}`}
-                                                        className="cursor-pointer text-sm font-medium text-primary"
+                                                        className="text-primary cursor-pointer text-sm font-medium"
                                                     >
                                                         Select all
                                                     </Label>
