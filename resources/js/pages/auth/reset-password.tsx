@@ -13,7 +13,7 @@ interface ResetPasswordProps {
     email: string;
 }
 
-interface ResetPasswordForm {
+type ResetPasswordForm = {
     token: string;
     email: string;
     password: string;
@@ -30,7 +30,7 @@ const ResetPassword = ({ token, email }: ResetPasswordProps) => {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('password.store'), {
+        post(route('password.update'), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };

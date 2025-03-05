@@ -29,7 +29,7 @@ Route::middleware(['auth', 'verified', AuthenticateSession::class])->group(funct
     Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('settings/password', [PasswordController::class, 'edit'])->name('password.edit');
-    Route::put('settings/password', [PasswordController::class, 'update'])->name('password.update');
+    Route::put('settings/password', [PasswordController::class, 'store'])->name('password.store');
 
     Route::get('settings/security', [SecurityController::class, 'edit'])->name('security.edit');
     Route::put('settings/security', [SecurityController::class, 'update'])->name('security.update');
