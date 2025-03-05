@@ -12,8 +12,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import type { Team } from '@/types';
 import { Link, useForm } from '@inertiajs/react';
-import { useCreateTeamModal } from './create-team-modal';
 import { Icon } from './icon';
+import { useCreateTeamModal } from './modal/create-team-modal';
 import { Button } from './ui/button';
 
 export function TeamSwitcher({ currentTeam, teams }: { currentTeam: Team; teams: Team[] }) {
@@ -41,7 +41,7 @@ export function TeamSwitcher({ currentTeam, teams }: { currentTeam: Team; teams:
             <CreateTeamModal />
             <div className="flex items-center gap-2">
                 <Button asChild variant="ghost" size="sm">
-                    <Link href={route('team.dashboard', currentTeam.slug)} className="flex items-center gap-2">
+                    <Link href={route('teams.dashboard', currentTeam.slug)} className="flex items-center gap-2">
                         <div className="text-left text-sm leading-tight">
                             <span className="truncate">{currentTeam.name}</span>
                         </div>

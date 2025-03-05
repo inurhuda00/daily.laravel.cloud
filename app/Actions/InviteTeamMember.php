@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Events\InvitingTeamMember;
-use App\Mail\TeamInvitation;
+use App\Mail\TeamInvitation as TeamInvitationMail;
 use App\Models\Team;
+use App\Models\TeamInvitation;
 use App\Models\User;
 use Closure;
 use Illuminate\Database\Query\Builder;
@@ -33,7 +34,7 @@ final class InviteTeamMember
             'role' => $role,
         ]);
 
-        Mail::to($email)->send(new TeamInvitation($invitation));
+        Mail::to($email)->send(new TeamInvitationMail($invitation));
     }
 
     /**
@@ -60,7 +61,8 @@ final class InviteTeamMember
     {
         return array_filter([
             'email' => [
-                'required', 'email',
+                'required',
+                'email',
                 Rule::unique(TeamInvitation::class)->where(function (Builder $query) use ($team) {
                     $query->where('team_id', $team->id);
                 }),

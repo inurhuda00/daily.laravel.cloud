@@ -11,4 +11,9 @@ final class TeamInvitation extends Model
 {
     /** @use HasFactory<\Database\Factories\TeamInvitationFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'email',
+        'role',
+    ];
 }

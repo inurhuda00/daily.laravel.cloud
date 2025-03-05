@@ -56,6 +56,7 @@ export interface User {
     updated_at: string;
     avatar: string;
     role: string;
+    two_factor_enabled: boolean;
     [key: string]: unknown;
 }
 

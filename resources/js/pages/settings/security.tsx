@@ -16,13 +16,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const Security = ({ sessions }: { sessions: Array<SessionInfo>; requiresConfirmation: boolean }) => {
+const Security = ({ sessions, requiresConfirmation }: { sessions: Array<SessionInfo>; requiresConfirmation: boolean }) => {
     return (
         <Fragment>
             <Head title="Security" />
 
             <SettingsLayout>
-                <TwoFactorAuthentication />
+                <TwoFactorAuthentication requiresConfirmation={requiresConfirmation} />
                 <BrowserSessions sessions={sessions} />
             </SettingsLayout>
         </Fragment>

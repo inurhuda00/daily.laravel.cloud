@@ -22,10 +22,12 @@ final class UpdateTeamName
 
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
+            'slug' => ['sometimes', 'required', 'string', 'max:255', 'alpha_dash', 'unique:teams,slug,'.$team->id],
         ])->validateWithBag('updateTeamName');
 
         $team->forceFill([
-            'name' => $input['name'],
+            'name' => $input['name'] ?? $team->name,
+            'slug' => $input['slug'] ?? $team->slug,
         ])->save();
     }
 }

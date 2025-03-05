@@ -1,12 +1,13 @@
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
+import { DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Modal from '@/components/ui/modal';
+
 import { useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { type Dispatch, type FormEventHandler, type SetStateAction, useMemo, useState } from 'react';
-import InputError from './input-error';
-import { Button } from './ui/button';
-import { DialogDescription, DialogTitle } from './ui/dialog';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import Modal from './ui/modal';
 
 function CreateTeamModal({ show, setShow }: { show: boolean; setShow: Dispatch<SetStateAction<boolean>> }) {
     const { data, setData, post, errors, processing } = useForm({ name: '' });
@@ -40,7 +41,7 @@ function CreateTeamModal({ show, setShow }: { show: boolean; setShow: Dispatch<S
                 </div>
 
                 <div className="flex gap-2">
-                    <Button variant="outline" type="button" onClick={() => setShow(false)}>
+                    <Button type="button" variant="outline" onClick={() => setShow(false)}>
                         Cancel
                     </Button>
                     <Button type="submit" disabled={processing}>

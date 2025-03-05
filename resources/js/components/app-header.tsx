@@ -52,8 +52,6 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const { auth } = page.props;
     const getInitials = useInitials();
 
-    console.log(page.url, mainNavItems(auth.selectors.current_team));
-
     return (
         <>
             <div className="border-sidebar-border/80 border-b">

@@ -1,120 +1,101 @@
 import type { BreadcrumbItem, SharedData } from '@/types';
 
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { Fragment, type FormEventHandler } from 'react';
+import { Head, useForm, usePage } from '@inertiajs/react';
+import { type FormEventHandler, Fragment } from 'react';
 
-import DeleteUser from '@/components/delete-user';
-import HeadingSmall from '@/components/heading-small';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+
+import DeleteTeam from '@/components/delete-team';
+import HeadingSmall from '@/components/heading-small';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import TeamSettingsLayout from '@/layouts/settings/team-layout';
-import { LoaderCircle } from 'lucide-react';
+import { CheckCircle2, LoaderCircle } from 'lucide-react';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Profile settings',
-        href: '/settings/profile',
+        title: 'Team settings',
+        href: '#',
     },
 ];
 
-const General = ({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) => {
+const General = () => {
     const { auth } = usePage<SharedData>().props;
+    const team = auth.selectors.current_team;
 
-    const { data, setData, patch, errors, processing } = useForm({
-        name: auth.user.name,
-        email: auth.user.email,
+    const { data, setData, put, errors, processing } = useForm({
+        slug: team.slug,
+        name: team.name,
     });
 
-    const submit: FormEventHandler = (e) => {
+    const handleUpdateTeam: FormEventHandler = (e) => {
         e.preventDefault();
 
-        patch(route('profile.update'), {
+        put(route('teams.update', team.id), {
             preserveScroll: true,
+            onSuccess: () => {
+                toast('Team Updated', {
+                    description: 'Your team settings have been updated successfully.',
+                    icon: <CheckCircle2 className="h-4 w-4 text-green-500" />,
+                });
+            },
         });
     };
 
     return (
         <Fragment>
-            <Head title="Profile settings" />
-
-            <TeamSettingsLayout team={auth.selectors.current_team}>
+            <Head title="Team Settings" />
+            <TeamSettingsLayout team={team}>
                 <div className="space-y-6">
-                    <HeadingSmall title="Profile information" description="Update your name and email address" />
+                    <HeadingSmall title="General" description="General settings related to this organization." />
                     <Separator />
-                    <form onSubmit={submit} className="space-y-6">
+                    <form onSubmit={handleUpdateTeam} className="space-y-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="name">Name</Label>
-                            <span className="text-muted-foreground block text-[0.8rem] opacity-75">Your full name.</span>
-
-                            <Input
-                                id="name"
-                                className="mt-1 block w-full"
-                                value={data.name}
-                                onChange={(e) => setData('name', e.target.value)}
-                                required
-                                autoComplete="name"
-                                placeholder="Full name"
-                            />
-
-                            <InputError className="mt-2" message={errors.name} />
-                        </div>
-
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">Email address</Label>
-                            <span className="text-muted-foreground block text-[0.8rem] opacity-75">
-                                The email address used for authentication and notifications.
-                            </span>
-
-                            <Input
-                                id="email"
-                                type="email"
-                                className="mt-1 block w-full"
-                                value={data.email}
-                                onChange={(e) => setData('email', e.target.value)}
-                                required
-                                autoComplete="username"
-                                placeholder="Email address"
-                            />
-
-                            <InputError className="mt-2" message={errors.email} />
-                        </div>
-
-                        {mustVerifyEmail && auth.user.email_verified_at === null && (
-                            <div>
-                                <p className="mt-2 text-sm text-neutral-800">
-                                    Your email address is unverified.
-                                    <Link
-                                        href={route('verification.send')}
-                                        method="post"
-                                        as="button"
-                                        className="rounded-md text-sm text-neutral-600 underline hover:text-neutral-900 focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
-                                    >
-                                        Click here to re-send the verification email.
-                                    </Link>
-                                </p>
-
-                                {status === 'verification-link-sent' && (
-                                    <div className="mt-2 text-sm font-medium text-green-600">
-                                        A new verification link has been sent to your email address.
-                                    </div>
-                                )}
+                            <Label htmlFor="name">Team name</Label>
+                            <div className="mt-1">
+                                <Input
+                                    id="name"
+                                    className="block w-full"
+                                    value={data.name}
+                                    onChange={(e) => setData('name', e.target.value)}
+                                    required
+                                    placeholder="Team name"
+                                />
+                                <InputError className="mt-2" message={errors.name} />
+                                <span className="text-muted-foreground mt-1 block text-[0.8rem]">The display name for your team.</span>
                             </div>
-                        )}
-
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="slug">Team handle</Label>
+                            <div className="mt-1">
+                                <Input
+                                    id="slug"
+                                    className="block w-full"
+                                    value={data.slug}
+                                    onChange={(e) => setData('slug', e.target.value)}
+                                    required
+                                    placeholder="team-handle"
+                                />
+                                <InputError className="mt-2" message={errors.slug} />
+                                <span className="text-muted-foreground mt-1 block text-[0.8rem]">
+                                    Used in your team's URL: example.com/{data.slug}/dashboard
+                                </span>
+                            </div>
+                        </div>
                         <div className="flex items-center gap-4">
-                            <Button disabled={processing}>
-                                {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                                Save
+                            <Button type="submit" disabled={processing}>
+                                {processing && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+                                Save Changes
                             </Button>
                         </div>
                     </form>
                 </div>
 
-                <DeleteUser />
+                <DeleteTeam team={team} />
             </TeamSettingsLayout>
         </Fragment>
     );

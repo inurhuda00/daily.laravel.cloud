@@ -12,7 +12,8 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import { LoaderCircle } from 'lucide-react';
+import { CheckCircle2, LoaderCircle } from 'lucide-react';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,6 +35,11 @@ const General = ({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status
 
         patch(route('profile.update'), {
             preserveScroll: true,
+        });
+
+        toast('Profile updated successfully!', {
+            description: 'Your profile information has been updated.',
+            icon: <CheckCircle2 className="h-4 w-4 text-green-500" />,
         });
     };
 

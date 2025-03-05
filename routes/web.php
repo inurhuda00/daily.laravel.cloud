@@ -18,8 +18,8 @@ require __DIR__.'/settings.php';
 Route::middleware(['auth', 'verified', TeamAccessMiddleware::class, AuthenticateSession::class])
     ->prefix('{team:slug}')
     ->group(function () {
-        Route::get('/dashboard', [TeamController::class, 'dashboard'])->name('team.dashboard');
-        Route::get('/settings', [TeamController::class, 'settings'])->name('team.settings');
+        Route::get('/dashboard', [TeamController::class, 'dashboard'])->name('teams.dashboard');
+        Route::get('/settings', [TeamController::class, 'settings'])->name('teams.settings');
 
-        Route::get('/members', [TeamMemberController::class, 'show'])->name('team.members');
+        Route::get('/members', [TeamMemberController::class, 'show'])->name('teams.members');
     });
