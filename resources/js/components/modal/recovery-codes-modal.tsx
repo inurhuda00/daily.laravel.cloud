@@ -11,13 +11,9 @@ import { toast } from 'sonner';
 function RecoveryCodesModal({ show, setShow }: { show: boolean; setShow: Dispatch<SetStateAction<boolean>> }) {
     const [recoveryCodes, setRecoveryCodes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [internalShow, setInternalShow] = useState(false);
 
     useEffect(() => {
-        if (!show) {
-            setInternalShow(false);
-            return;
-        }
+        if (!show) return;
 
         const controller = new AbortController();
         const signal = controller.signal;
@@ -28,7 +24,6 @@ function RecoveryCodesModal({ show, setShow }: { show: boolean; setShow: Dispatc
                 const { data } = await axios.get(route('two-factor.recovery-codes'));
                 setRecoveryCodes(data);
                 setIsLoading(false);
-                setInternalShow(true);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     await axios.post(route('two-factor.enable'), { signal });
@@ -76,21 +71,19 @@ function RecoveryCodesModal({ show, setShow }: { show: boolean; setShow: Dispatc
     };
 
     return (
-        <Modal showModal={internalShow} setShowModal={setShow} preventDefaultClose>
+        <Modal showModal={show} setShowModal={setShow} preventDefaultClose>
             <DialogTitle>Account recovery codes</DialogTitle>
             <DialogDescription>
                 Store your recovery codes in a safe place. They can be used to recover access to your account if your two-factor authentication app is
                 lost.
             </DialogDescription>
-            <div className="space-y-2 rounded bg-gray-50 p-6 text-center font-mono text-sm break-all min-h-[200px]">
+            <div className="min-h-[200px] space-y-2 rounded bg-gray-50 p-6 text-center font-mono text-sm break-all">
                 {isLoading ? (
                     <div className="flex h-full items-center justify-center">
                         <LoaderCircle className="h-8 w-8 animate-spin text-gray-400" />
                     </div>
                 ) : (
-                    recoveryCodes.map((code) => (
-                        <div key={code}>{code}</div>
-                    ))
+                    recoveryCodes.map((code) => <div key={code}>{code}</div>)
                 )}
             </div>
 

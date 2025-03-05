@@ -24,8 +24,7 @@ function TwoFactorSetupModal({
 
     const [qrCode, setQrCode] = useState('');
     const [setupKey, setSetupKey] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
-    const [internalShow, setInternalShow] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const handleConfirm: FormEventHandler = async (e) => {
         e.preventDefault();
@@ -42,28 +41,23 @@ function TwoFactorSetupModal({
     };
 
     useEffect(() => {
-        if (!show) {
-            setInternalShow(false);
-            return;
-        }
+        if (!show) return;
 
         const controller = new AbortController();
-        const signal = controller.signal;
-        setIsLoading(true);
+        setLoading(true);
 
         const fetchSetupTwoFactor = async () => {
             try {
                 const [qrResponse, keyResponse] = await Promise.all([
-                    axios.get(route('two-factor.qr-code'), { signal }),
-                    axios.get(route('two-factor.secret-key'), { signal }),
+                    axios.get(route('two-factor.qr-code')),
+                    axios.get(route('two-factor.secret-key')),
                 ]);
                 setQrCode(qrResponse.data.svg);
                 setSetupKey(keyResponse.data.secretKey);
-                setIsLoading(false);
-                setInternalShow(true);
+                setLoading(false);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
-                    await axios.post(route('two-factor.enable'), { signal });
+                    await axios.post(route('two-factor.enable'));
                     fetchSetupTwoFactor();
                 }
             }
@@ -75,7 +69,7 @@ function TwoFactorSetupModal({
     }, [show]);
 
     return (
-        <Modal showModal={internalShow} setShowModal={setShow} onClose={onClose} preventDefaultClose>
+        <Modal showModal={show} setShowModal={setShow} onClose={onClose} preventDefaultClose>
             <DialogTitle>Complete two-factor authentication setup</DialogTitle>
             <DialogDescription>Complete the following steps:</DialogDescription>
 
@@ -105,7 +99,7 @@ function TwoFactorSetupModal({
                                         value="qrcode"
                                         className="m-0 h-full border-0 p-0 data-[state=active]:flex data-[state=active]:items-center data-[state=active]:justify-center"
                                     >
-                                        {isLoading ? (
+                                        {loading ? (
                                             <div className="flex items-center justify-center">
                                                 <LoaderCircle className="h-8 w-8 animate-spin text-gray-400" />
                                             </div>
@@ -120,12 +114,14 @@ function TwoFactorSetupModal({
                                     >
                                         <p className="mb-2 text-xs text-gray-500">Enter this key into your authenticator app:</p>
                                         <div className="relative">
-                                            {isLoading ? (
+                                            {loading ? (
                                                 <div className="flex items-center justify-center">
                                                     <LoaderCircle className="h-8 w-8 animate-spin text-gray-400" />
                                                 </div>
                                             ) : (
-                                                <div className="rounded bg-gray-50 p-3 pr-10 text-center font-mono text-base">{setupKey}</div>
+                                                <div className="text-primary-foreground rounded bg-gray-50 p-3 pr-10 text-center font-mono text-base">
+                                                    {setupKey}
+                                                </div>
                                             )}
                                         </div>
                                     </TabsContent>
