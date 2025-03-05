@@ -24,6 +24,8 @@ function TwoFactorSetupModal({
 
     const [qrCode, setQrCode] = useState('');
     const [setupKey, setSetupKey] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [internalShow, setInternalShow] = useState(false);
 
     const handleConfirm: FormEventHandler = async (e) => {
         e.preventDefault();
@@ -40,10 +42,14 @@ function TwoFactorSetupModal({
     };
 
     useEffect(() => {
-        if (!show) return;
+        if (!show) {
+            setInternalShow(false);
+            return;
+        }
 
         const controller = new AbortController();
         const signal = controller.signal;
+        setIsLoading(true);
 
         const fetchSetupTwoFactor = async () => {
             try {
@@ -53,6 +59,8 @@ function TwoFactorSetupModal({
                 ]);
                 setQrCode(qrResponse.data.svg);
                 setSetupKey(keyResponse.data.secretKey);
+                setIsLoading(false);
+                setInternalShow(true);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     await axios.post(route('two-factor.enable'), { signal });
@@ -67,7 +75,7 @@ function TwoFactorSetupModal({
     }, [show]);
 
     return (
-        <Modal showModal={show} setShowModal={setShow} onClose={onClose} preventDefaultClose>
+        <Modal showModal={internalShow} setShowModal={setShow} onClose={onClose} preventDefaultClose>
             <DialogTitle>Complete two-factor authentication setup</DialogTitle>
             <DialogDescription>Complete the following steps:</DialogDescription>
 
@@ -97,8 +105,14 @@ function TwoFactorSetupModal({
                                         value="qrcode"
                                         className="m-0 h-full border-0 p-0 data-[state=active]:flex data-[state=active]:items-center data-[state=active]:justify-center"
                                     >
-                                        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation> */}
-                                        <div dangerouslySetInnerHTML={{ __html: qrCode }} />
+                                        {isLoading ? (
+                                            <div className="flex items-center justify-center">
+                                                <LoaderCircle className="h-8 w-8 animate-spin text-gray-400" />
+                                            </div>
+                                        ) : (
+                                            /* biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation> */
+                                            <div dangerouslySetInnerHTML={{ __html: qrCode }} />
+                                        )}
                                     </TabsContent>
                                     <TabsContent
                                         value="setupkey"
@@ -106,7 +120,13 @@ function TwoFactorSetupModal({
                                     >
                                         <p className="mb-2 text-xs text-gray-500">Enter this key into your authenticator app:</p>
                                         <div className="relative">
-                                            <div className="rounded bg-gray-50 p-3 pr-10 text-center font-mono text-base">{setupKey}</div>
+                                            {isLoading ? (
+                                                <div className="flex items-center justify-center">
+                                                    <LoaderCircle className="h-8 w-8 animate-spin text-gray-400" />
+                                                </div>
+                                            ) : (
+                                                <div className="rounded bg-gray-50 p-3 pr-10 text-center font-mono text-base">{setupKey}</div>
+                                            )}
                                         </div>
                                     </TabsContent>
                                 </div>

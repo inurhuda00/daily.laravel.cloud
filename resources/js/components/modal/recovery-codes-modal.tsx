@@ -4,23 +4,31 @@ import { DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import Modal from '@/components/ui/modal';
 import { copyToClipboard } from '@/lib/copy-to-clipboard';
 import axios from 'axios';
-import { CheckCircle2, CopyIcon, DownloadIcon, RefreshCwIcon } from 'lucide-react';
+import { CheckCircle2, CopyIcon, DownloadIcon, LoaderCircle, RefreshCwIcon } from 'lucide-react';
 import { type Dispatch, type SetStateAction, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 function RecoveryCodesModal({ show, setShow }: { show: boolean; setShow: Dispatch<SetStateAction<boolean>> }) {
     const [recoveryCodes, setRecoveryCodes] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [internalShow, setInternalShow] = useState(false);
 
     useEffect(() => {
-        if (!show) return;
+        if (!show) {
+            setInternalShow(false);
+            return;
+        }
 
         const controller = new AbortController();
         const signal = controller.signal;
+        setIsLoading(true);
 
         const fetchSetupRecoveryCodes = async () => {
             try {
                 const { data } = await axios.get(route('two-factor.recovery-codes'));
                 setRecoveryCodes(data);
+                setIsLoading(false);
+                setInternalShow(true);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     await axios.post(route('two-factor.enable'), { signal });
@@ -60,23 +68,30 @@ function RecoveryCodesModal({ show, setShow }: { show: boolean; setShow: Dispatc
     };
 
     const handleRefresh = async () => {
+        setIsLoading(true);
         await axios.post(route('two-factor.recovery-codes'));
         const { data } = await axios.get(route('two-factor.recovery-codes'));
-
         setRecoveryCodes(data);
+        setIsLoading(false);
     };
 
     return (
-        <Modal showModal={show} setShowModal={setShow} preventDefaultClose>
+        <Modal showModal={internalShow} setShowModal={setShow} preventDefaultClose>
             <DialogTitle>Account recovery codes</DialogTitle>
             <DialogDescription>
                 Store your recovery codes in a safe place. They can be used to recover access to your account if your two-factor authentication app is
                 lost.
             </DialogDescription>
-            <div className="space-y-2 rounded bg-gray-50 p-6 text-center font-mono text-sm break-all">
-                {recoveryCodes.map((code) => (
-                    <div key={code}>{code}</div>
-                ))}
+            <div className="space-y-2 rounded bg-gray-50 p-6 text-center font-mono text-sm break-all min-h-[200px]">
+                {isLoading ? (
+                    <div className="flex h-full items-center justify-center">
+                        <LoaderCircle className="h-8 w-8 animate-spin text-gray-400" />
+                    </div>
+                ) : (
+                    recoveryCodes.map((code) => (
+                        <div key={code}>{code}</div>
+                    ))
+                )}
             </div>
 
             <div className="mt-4 flex justify-between gap-2">
