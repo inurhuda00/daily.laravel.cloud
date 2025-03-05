@@ -77,7 +77,7 @@ function RecoveryCodesModal({ show, setShow }: { show: boolean; setShow: Dispatc
                 Store your recovery codes in a safe place. They can be used to recover access to your account if your two-factor authentication app is
                 lost.
             </DialogDescription>
-            <div className="min-h-[200px] space-y-2 rounded bg-gray-50 p-6 text-center font-mono text-sm break-all">
+            <div className="text-secondary-foreground bg-secondary min-h-[200px] space-y-2 rounded p-6 text-center font-mono text-sm break-all">
                 {isLoading ? (
                     <div className="flex h-full items-center justify-center">
                         <LoaderCircle className="h-8 w-8 animate-spin text-gray-400" />

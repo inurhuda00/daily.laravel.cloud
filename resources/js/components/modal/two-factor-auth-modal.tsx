@@ -119,7 +119,7 @@ function TwoFactorSetupModal({
                                                     <LoaderCircle className="h-8 w-8 animate-spin text-gray-400" />
                                                 </div>
                                             ) : (
-                                                <div className="text-primary-foreground rounded bg-gray-50 p-3 pr-10 text-center font-mono text-base">
+                                                <div className="text-secondary-foreground bg-secondary rounded p-3 pr-10 text-center font-mono text-base select-all">
                                                     {setupKey}
                                                 </div>
                                             )}
