@@ -20,6 +20,7 @@ use Inertia\Inertia;
 use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Contracts\PasswordConfirmedResponse;
 use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\VerifyEmailResponse;
 use Laravel\Fortify\Fortify;
 
@@ -69,6 +70,16 @@ final class FortifyServiceProvider extends ServiceProvider
         });
 
         $this->app->instance(PasswordConfirmedResponse::class, new class implements PasswordConfirmedResponse
+        {
+            public function toResponse($request)
+            {
+                return $request->wantsJson()
+                    ? new JsonResponse('', 201)
+                    : Redirect::intended(route('teams.dashboard', $request->user()->currentTeam), 303);
+            }
+        });
+
+        $this->app->instance(TwoFactorLoginResponse::class, new class implements TwoFactorLoginResponse
         {
             public function toResponse($request)
             {
