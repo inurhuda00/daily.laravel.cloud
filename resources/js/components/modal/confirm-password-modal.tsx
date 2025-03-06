@@ -11,12 +11,15 @@ import { type Dispatch, type FormEventHandler, type SetStateAction, useMemo, use
 
 function ConfirmPasswordModal({ show, setShow, onComplete }: { show: boolean; setShow: Dispatch<SetStateAction<boolean>>; onComplete: () => void }) {
     const passwordInput = useRef<HTMLInputElement>(null);
-    const { data, setData, errors, processing, reset, setError } = useForm({
+    const [loading, setLoading] = useState(false);
+    const { data, setData, errors, reset, setError } = useForm({
         password: '',
     });
 
     const submit: FormEventHandler = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
         try {
             const response = await axios.post(route('password.confirm.store'), data);
             if (response.status === 201) {
@@ -33,6 +36,8 @@ function ConfirmPasswordModal({ show, setShow, onComplete }: { show: boolean; se
                 }
             }
         }
+
+        setLoading(false);
     };
 
     return (
@@ -63,8 +68,8 @@ function ConfirmPasswordModal({ show, setShow, onComplete }: { show: boolean; se
                         <Button type="button" variant="ghost" onClick={() => setShow(false)} className="h-9 text-sm">
                             Cancel
                         </Button>
-                        <Button type="submit" className="w-full" disabled={processing}>
-                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                        <Button type="submit" className="w-full" disabled={loading}>
+                            {loading && <LoaderCircle className="h-4 w-4 animate-spin" />}
                             Confirm password
                         </Button>
                     </div>

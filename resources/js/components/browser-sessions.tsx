@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import type { SessionInfo } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { Laptop2, Phone } from 'lucide-react';
+import { Laptop2, LoaderCircle, Phone } from 'lucide-react';
 import { type FormEventHandler, useRef } from 'react';
 
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -88,13 +88,14 @@ export default function BrowserSessions({ sessions }: { sessions: Array<SessionI
 
                         <DialogFooter>
                             <DialogClose asChild>
-                                <Button variant="secondary" onClick={closeModal}>
+                                <Button type="button" variant="secondary" onClick={closeModal}>
                                     Cancel
                                 </Button>
                             </DialogClose>
 
-                            <Button variant="destructive" disabled={processing} asChild>
-                                <button type="submit">Log Out Other Browser Sessions</button>
+                            <Button type="submit" variant="destructive" disabled={processing}>
+                                {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                                Log Out Other Browser Sessions
                             </Button>
                         </DialogFooter>
                     </form>

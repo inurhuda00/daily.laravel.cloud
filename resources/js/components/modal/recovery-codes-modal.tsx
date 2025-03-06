@@ -26,7 +26,7 @@ function RecoveryCodesModal({ show, setShow }: { show: boolean; setShow: Dispatc
                 setIsLoading(false);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
-                    await axios.post(route('two-factor.enable'), { signal });
+                    await axios.post(route('two-factor.enable'));
                     fetchSetupRecoveryCodes();
                 }
             }
@@ -66,6 +66,7 @@ function RecoveryCodesModal({ show, setShow }: { show: boolean; setShow: Dispatc
         setIsLoading(true);
         await axios.post(route('two-factor.recovery-codes'));
         const { data } = await axios.get(route('two-factor.recovery-codes'));
+
         setRecoveryCodes(data);
         setIsLoading(false);
     };
