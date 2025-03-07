@@ -18,7 +18,7 @@ type ResetPasswordForm = {
     email: string;
     password: string;
     password_confirmation: string;
-}
+};
 
 const ResetPassword = ({ token, email }: ResetPasswordProps) => {
     const { data, setData, post, processing, errors, reset } = useForm<ResetPasswordForm>({

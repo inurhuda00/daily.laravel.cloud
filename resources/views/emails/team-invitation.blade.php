@@ -1,4 +1,4 @@
-@endcomponent@component('mail::message')
+@component('mail::message')
 # You're Invited!
 
 You have been invited to join **{{ $invitation->email }}** as a **{{ $invitation->role }}**.

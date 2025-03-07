@@ -53,15 +53,17 @@ Route::middleware(['auth', 'verified', AuthenticateSession::class])->group(funct
     // Teams...
     Route::get('/teams/create', [TeamController::class, 'create'])->name('teams.create');
     Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
-    Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show');
-    Route::put('/teams/{team}', [TeamController::class, 'update'])->name('teams.update');
-    Route::delete('/teams/{team}', [TeamController::class, 'destroy'])->name('teams.destroy');
+    Route::get('/teams/{team:slug}', [TeamController::class, 'show'])->name('teams.show');
+    Route::put('/teams/{team:slug}', [TeamController::class, 'update'])->name('teams.update');
+    Route::delete('/teams/{team:slug}', [TeamController::class, 'destroy'])->name('teams.destroy');
 
     Route::put('/current-team', [CurrentTeamController::class, 'update'])->name('current-team.update');
-    Route::post('/teams/{team}/members', [TeamMemberController::class, 'store'])->name('team-members.store');
-    Route::put('/teams/{team}/members/{user}', [TeamMemberController::class, 'update'])->name('team-members.update');
-    Route::delete('/teams/{team}/members/{user}', [TeamMemberController::class, 'destroy'])->name('team-members.destroy');
 
+    Route::post('/teams/{team:slug}/members', [TeamMemberController::class, 'store'])->name('team-members.store');
+    Route::put('/teams/{team:slug}/members/{user}', [TeamMemberController::class, 'update'])->name('team-members.update');
+    Route::delete('/teams/{team:slug}/members/{user}', [TeamMemberController::class, 'destroy'])->name('team-members.destroy');
+
+    Route::post('/team-invitations/{invitation}/resend', [TeamInvitationController::class, 'resend'])->name('team-members.resend');
     Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept'])
         ->middleware(['signed'])
         ->name('team-invitations.accept');

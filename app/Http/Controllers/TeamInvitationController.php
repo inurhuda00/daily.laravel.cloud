@@ -6,10 +6,13 @@ namespace App\Http\Controllers;
 
 use App\Actions\AddTeamMember;
 use App\Models\TeamInvitation;
+use App\Mail\TeamInvitation as TeamInvitationMail;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 
 final class TeamInvitationController extends Controller
@@ -38,6 +41,19 @@ final class TeamInvitationController extends Controller
         return Redirect::to("/{$request->user()->currentTeam->slug}/dashboard", 303)->banner(
             __('Great! You have accepted the invitation to join the :team team.', ['team' => $invitation->team->name]),
         );
+    }
+
+    public function resend(Request $request, $invitationId)
+    {
+        $modal = TeamInvitation::class;
+
+        $invitation = $modal::whereKey($invitationId)->firstOrFail();
+
+        Mail::to($invitation->email)->send(new TeamInvitationMail($invitation));
+
+        $request->wantsJson()
+            ? new JsonResponse('', 201)
+            : Redirect::back();
     }
 
     /**

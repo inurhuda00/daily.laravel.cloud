@@ -9,10 +9,10 @@ import { Label } from '@/components/ui/label';
 import HeadingSmall from '@/components/heading-small';
 
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 import type { Team } from '@/types';
 import { CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { Separator } from './ui/separator';
 
 export default function DeleteTeam({ team }: { team: Team }) {
     const passwordInput = useRef<HTMLInputElement>(null);

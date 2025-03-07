@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Actions\InviteTeamMember;
 use App\Actions\RemoveTeamMember;
 use App\Actions\UpdateTeamMemberRole;
+use App\Enums\Role;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,7 +19,11 @@ final class TeamMemberController extends Controller
 {
     public function show(Team $team, Request $request)
     {
-        return Inertia::render('teams/settings/members');
+        return Inertia::render('teams/settings/members', [
+            'roles' => Role::toArray(),
+            'membersInvitations' => $team->teamInvitations()->get(),
+            'members' => $team->allUsers()
+        ]);
     }
 
     /**
@@ -27,10 +32,8 @@ final class TeamMemberController extends Controller
      * @param  int  $teamId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request, $teamId)
+    public function store(Team $team, Request $request)
     {
-        $team = Team::findOrFail($teamId);
-
         app(InviteTeamMember::class)->invite(
             $request->user(),
             $team,

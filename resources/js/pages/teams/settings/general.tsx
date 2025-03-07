@@ -8,13 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import DeleteTeam from '@/components/delete-team';
 import HeadingSmall from '@/components/heading-small';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import TeamSettingsLayout from '@/layouts/settings/team-layout';
 import { CheckCircle2, LoaderCircle } from 'lucide-react';
 import { toast } from 'sonner';
+
+import DeleteTeam from './_components/delete-team';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

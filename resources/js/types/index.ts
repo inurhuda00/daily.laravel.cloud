@@ -60,6 +60,13 @@ export interface User {
     [key: string]: unknown;
 }
 
+export interface TeamInvitations {
+    id: number;
+    role: string;
+    email: string;
+    invitation_link: string;
+}
+
 export interface Selectors {
     teams: Array<Team>;
     current_team: Team;
