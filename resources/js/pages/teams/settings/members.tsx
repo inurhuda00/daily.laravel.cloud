@@ -39,7 +39,7 @@ const Members = ({
 
                     <AddTeamMemberForm roles={roles} team={auth.selectors.current_team} />
 
-                    <TeamMembers roles={roles} members={members} invitations={membersInvitations} />
+                    <TeamMembers currentTeam={auth.selectors.current_team} roles={roles} members={members} invitations={membersInvitations} />
                 </div>
             </TeamSettingsLayout>
         </Fragment>

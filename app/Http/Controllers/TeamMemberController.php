@@ -51,11 +51,11 @@ final class TeamMemberController extends Controller
      * @param  int  $userId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $teamId, $userId)
+    public function update(Request $request, Team $team, $userId)
     {
         app(UpdateTeamMemberRole::class)->update(
             $request->user(),
-            Team::findOrFail($teamId),
+            $team,
             $userId,
             $request->role
         );
