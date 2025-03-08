@@ -28,7 +28,7 @@ it('adds a team member successfully', function () {
         ->andReturnNull();
 
     $action = new AddTeamMember();
-    $result = $action->add($this->owner, $this->team, $this->user->email, 'editor');
+    $action->add($this->owner, $this->team, $this->user->email, 'editor');
 
     expect($this->team->fresh()->hasUserWithEmail($this->user->email))->toBeTrue();
 

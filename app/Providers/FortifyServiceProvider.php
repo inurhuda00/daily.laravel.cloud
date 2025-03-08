@@ -65,7 +65,7 @@ final class FortifyServiceProvider extends ServiceProvider
             {
                 return $request->wantsJson()
                     ? new JsonResponse('', 201)
-                    : Redirect::intended(route('teams.dashboard', $request->user()->currentTeam).'?verified=1', 303);
+                    : Redirect::intended(route('teams.dashboard', $request->user()->currentTeam) . '?verified=1', 303);
             }
         });
 
@@ -95,7 +95,7 @@ final class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
 
             return Limit::perMinute(5)->by($throttleKey);
         });

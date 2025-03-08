@@ -2,22 +2,24 @@
 
 declare(strict_types=1);
 
+use App\Models\Team;
 use App\Models\User;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-test('confirm password screen can be rendered', function () {
-    $user = User::factory()->create();
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->team = Team::factory()->create(['user_id' => $this->user->id]);
+});
 
-    $response = $this->actingAs($user)->get('/user/confirm-password');
+test('confirm password screen can be rendered', function () {
+    $response = $this->actingAs($this->user)->get('/user/confirm-password');
 
     $response->assertStatus(200);
 });
 
 test('password can be confirmed', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->post('/user/confirm-password', [
+    $response = $this->actingAs($this->user)->post('/user/confirm-password', [
         'password' => 'password',
     ]);
 
@@ -26,9 +28,7 @@ test('password can be confirmed', function () {
 });
 
 test('password is not confirmed with invalid password', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->post('/user/confirm-password', [
+    $response = $this->actingAs($this->user)->post('/user/confirm-password', [
         'password' => 'wrong-password',
     ]);
 
